@@ -1,0 +1,214 @@
+.navbar {
+    background-color: rgba(255, 255, 255, 0.8);
+    backdrop-filter: saturate(180%) blur(20px);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    height: 44px;
+    transition: all 0.3s ease;
+    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.05);
+  }
+  
+  .navbar.scrolled {
+    background-color: rgba(255, 255, 255, 0.95);
+    box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .navbar-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+    padding: 0 20px;
+  }
+  
+  .navbar-logo {
+    color: #000;
+    text-decoration: none;
+    font-size: 1.2rem;
+    font-weight: 500;
+  }
+  
+  .nav-menu {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .nav-item {
+    margin: 0 10px;
+  }
+  
+  .nav-link {
+    color: #333;
+    text-decoration: none;
+    font-size: 0.9rem;
+    opacity: 0.8;
+    transition: opacity 0.2s ease;
+    padding: 10px;
+  }
+  
+  .nav-link:hover {
+    opacity: 1;
+  }
+  
+  .user-menu {
+    display: flex;
+    align-items: center;
+  }
+  
+  .user-dropdown {
+    position: relative;
+  }
+  
+  .user-button {
+    background: none;
+    border: none;
+    color: #333;
+    cursor: pointer;
+    font-size: 0.9rem;
+    padding: 5px 10px;
+    border-radius: 15px;
+    transition: background-color 0.2s;
+  }
+  
+  .user-button:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+  }
+  
+  .dropdown-menu {
+    position: absolute;
+    right: 0;
+    top: 100%;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+    min-width: 150px;
+    margin-top: 10px;
+    padding: 5px 0;
+    z-index: 1000;
+  }
+  
+  .dropdown-item {
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding: 10px 15px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-size: 0.9rem;
+    color: #333;
+    transition: background-color 0.2s;
+  }
+  
+  .dropdown-item:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+  }
+  
+  .login-button {
+    display: inline-block;
+    padding: 6px 14px;
+    background-color: #0071e3;
+    color: white;
+    text-decoration: none;
+    border-radius: 15px;
+    font-size: 0.9rem;
+    transition: background-color 0.2s;
+  }
+  
+  .login-button:hover {
+    background-color: #0058b3;
+  }
+  
+  .menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    width: 30px;
+    height: 20px;
+    position: relative;
+  }
+  
+  .menu-toggle span {
+    display: block;
+    position: absolute;
+    height: 2px;
+    width: 100%;
+    background: #333;
+    border-radius: 1px;
+    opacity: 1;
+    left: 0;
+    transform: rotate(0deg);
+    transition: 0.25s ease-in-out;
+  }
+  
+  .menu-toggle span:nth-child(1) {
+    top: 0px;
+  }
+  
+  .menu-toggle span:nth-child(2) {
+    top: 9px;
+  }
+  
+  .menu-toggle span:nth-child(3) {
+    top: 18px;
+  }
+  
+  .menu-toggle.open span:nth-child(1) {
+    top: 9px;
+    transform: rotate(135deg);
+  }
+  
+  .menu-toggle.open span:nth-child(2) {
+    opacity: 0;
+    left: -60px;
+  }
+  
+  .menu-toggle.open span:nth-child(3) {
+    top: 9px;
+    transform: rotate(-135deg);
+  }
+  
+  @media (max-width: 768px) {
+    .menu-toggle {
+      display: block;
+      z-index: 1001;
+    }
+    
+    .nav-menu {
+      position: fixed;
+      top: 0;
+      right: -100%;
+      width: 80%;
+      max-width: 300px;
+      height: 100vh;
+      background-color: white;
+      flex-direction: column;
+      padding-top: 60px;
+      transition: right 0.3s ease;
+      box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+    }
+    
+    .nav-menu.open {
+      right: 0;
+    }
+    
+    .nav-item {
+      margin: 0;
+      width: 100%;
+    }
+    
+    .nav-link {
+      display: block;
+      padding: 15px 20px;
+      font-size: 1.1rem;
+      border-bottom: 1px solid #f1f1f1;
+    }
+  }

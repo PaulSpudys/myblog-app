@@ -1,0 +1,404 @@
+.submit-button:disabled {
+  background-color: #999;
+  cursor: not-allowed;
+}
+
+.submit-message {
+  margin-top: 15px;
+  padding: 10px;
+  border-radius: 4px;
+  text-align: center;
+}
+
+.submit-message.success {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.submit-message.error {
+  background-color: #f8d7da;
+  color: #721c24;
+}.admin-post-container {
+  max-width: 1200px;
+  margin: 20px auto;
+  padding: 20px;
+}
+
+.admin-title {
+  font-size: 2rem;
+  margin-bottom: 20px;
+  color: #333;
+  text-align: center;
+}
+
+.admin-layout {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+}
+
+.admin-form {
+  flex: 1;
+  min-width: 300px;
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.post-preview {
+  flex: 1;
+  min-width: 300px;
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 100px;
+  max-height: calc(100vh - 120px);
+  overflow-y: auto;
+}
+
+/* Formatting for the preview content */
+.preview-content strong, 
+.preview-content b {
+  font-weight: bold;
+}
+
+.preview-content em, 
+.preview-content i {
+  font-style: italic;
+}
+
+.preview-content u {
+  text-decoration: underline;
+}
+
+.preview-content h2 {
+  font-size: 1.5rem;
+  margin: 20px 0 10px;
+  color: #333;
+}
+
+.preview-content h3 {
+  font-size: 1.3rem;
+  margin: 18px 0 9px;
+  color: #333;
+}
+
+.preview-content blockquote {
+  border-left: 3px solid #ccc;
+  margin: 15px 0;
+  padding: 10px 20px;
+  background-color: #f9f9f9;
+  font-style: italic;
+  color: #555;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #333;
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.form-group textarea {
+  resize: vertical;
+}
+
+.author-toggle {
+  margin-bottom: 20px;
+}
+
+.toggle-container {
+  display: flex;
+  margin-top: 5px;
+}
+
+.toggle-button {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ddd;
+  background-color: #f5f5f5;
+  color: #333;
+  transition: all 0.3s ease;
+}
+
+.toggle-button:first-child {
+  border-radius: 4px 0 0 4px;
+}
+
+.toggle-button:last-child {
+  border-radius: 0 4px 4px 0;
+}
+
+.toggle-button.active {
+  background-color: #333;
+  color: #fff;
+}
+
+.submit-button {
+  background-color: #333;
+  color: #fff;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+  width: 100%;
+}
+
+.submit-button:hover {
+  background-color: #555;
+}
+
+.form-actions {
+  display: flex;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.form-actions .submit-button {
+  flex: 3;
+}
+
+.cancel-button {
+  flex: 1;
+  background-color: #757575;
+  color: #fff;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+}
+
+.cancel-button:hover {
+  background-color: #616161;
+}
+
+/* Image gallery styles */
+.image-gallery {
+  margin-bottom: 20px;
+  border: 1px solid #ddd;
+  padding: 15px;
+  border-radius: 4px;
+  background-color: #f9f9f9;
+}
+
+.image-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 15px;
+  margin-top: 10px;
+}
+
+.image-item {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 10px;
+  background-color: #fff;
+}
+
+.image-preview {
+  width: 100%;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 4px;
+  margin-bottom: 8px;
+}
+
+.image-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.image-controls select {
+  width: 100%;
+  padding: 5px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+}
+
+.image-buttons {
+  display: flex;
+  gap: 5px;
+}
+
+.insert-image {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 5px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  flex: 1;
+}
+
+.insert-image:hover {
+  background-color: #45a049;
+}
+
+.remove-image {
+  background-color: #f44336;
+  color: white;
+  border: none;
+  padding: 5px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  flex: 1;
+}
+
+.remove-image:hover {
+  background-color: #d32f2f;
+}
+
+.image-item {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 10px;
+  background-color: #fff;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.image-item:hover {
+  border-color: #aaa;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.image-item.selected {
+  border-color: #4CAF50;
+  box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.3);
+}
+
+.image-status {
+  margin-top: 5px;
+  font-size: 0.8rem;
+  color: #4CAF50;
+  text-align: center;
+  font-style: italic;
+}
+
+.insert-controls {
+  margin-top: 15px;
+  text-align: center;
+}
+
+.insert-button {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.insert-button:hover {
+  background-color: #45a049;
+}
+
+.content-help {
+  margin-top: 5px;
+  font-size: 0.8rem;
+  color: #666;
+  font-style: italic;
+}
+
+/* Preview Styles */
+.preview-title {
+  font-size: 1.8rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.preview-author {
+  font-size: 1rem;
+  color: #666;
+  margin-bottom: 20px;
+}
+
+.preview-content {
+  line-height: 1.6;
+  color: #333;
+}
+
+.preview-image {
+  margin: 20px 0;
+  max-width: 100%;
+}
+
+.preview-image img {
+  max-width: 100%;
+  border-radius: 4px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.preview-left {
+  float: left;
+  margin-right: 15px;
+  max-width: 40%;
+}
+
+.preview-right {
+  float: right;
+  margin-left: 15px;
+  max-width: 40%;
+}
+
+.preview-center {
+  display: block;
+  margin: 20px auto;
+  max-width: 70%;
+}
+
+.preview-full {
+  display: block;
+  margin: 20px auto;
+  width: 100%;
+}
+
+/* Blog image styles that will be used in the final blog posts */
+.blog-image-left {
+  float: left;
+  margin-right: 15px;
+  max-width: 40%;
+}
+
+.blog-image-right {
+  float: right;
+  margin-left: 15px;
+  max-width: 40%;
+}
+
+.blog-image-center {
+  display: block;
+  margin: 20px auto;
+  max-width: 70%;
+}
+
+.blog-image-full {
+  display: block;
+  width: 100%;
+  margin: 20px 0;
+}

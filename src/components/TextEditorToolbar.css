@@ -1,0 +1,41 @@
+.text-editor-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-bottom: 10px;
+    padding: 5px;
+    background-color: #f5f5f5;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+  
+  .toolbar-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 36px;
+    height: 36px;
+    font-size: 1rem;
+    border: 1px solid #ddd;
+    background-color: white;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  
+  .toolbar-button:hover {
+    background-color: #f0f0f0;
+    border-color: #aaa;
+  }
+  
+  .toolbar-button:active {
+    background-color: #e0e0e0;
+  }
+  
+  @media (max-width: 600px) {
+    .toolbar-button {
+      width: 32px;
+      height: 32px;
+      font-size: 0.9rem;
+    }
+  }
