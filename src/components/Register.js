@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import '/Users/psmedia/Desktop/blog/myblog-app/src/pages/LoginPage.css'; // Using your existing LoginPage styling
+import '../pages/LoginPage.css'; // Using your existing LoginPage styling
 
 function Register() {
   const [email, setEmail] = useState('');

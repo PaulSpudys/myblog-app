@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import '/Users/psmedia/Desktop/blog/myblog-app/src/pages/LoginPage.css'; // Using your existing LoginPage styling
+import '../pages/LoginPage.css'; // Using your existing LoginPage styling
 
 function ForgotPassword() {
   const [email, setEmail] = useState('');
