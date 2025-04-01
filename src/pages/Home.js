@@ -12,18 +12,11 @@ function Home() {
           <p className="hero-subtitle">
             A place where we share our thoughts, experiences, and stories.
           </p>
-          <div className="hero-buttons">
-            <Link to="/his-blog" className="hero-button primary">His Blog</Link>
-            <Link to="/her-blog" className="hero-button secondary">Her Blog</Link>
-          </div>
         </div>
       </section>
 
       {/* Featured Posts Section */}
       <section className="featured-section">
-        <div className="section-header">
-          <h2 className="section-title">Featured Posts</h2>
-        </div>
         <div className="featured-grid">
           <div className="featured-item his-blog">
             <div className="featured-content">
