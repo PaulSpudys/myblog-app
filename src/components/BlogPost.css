@@ -1,258 +1,371 @@
+/* Dark Theme BlogPost.css */
+:root {
+  --dark-bg: #1a1a1c;
+  --dark-surface: #2a2a2e;
+  --dark-elevated: #323236;
+  --text-primary: #f5f5f7;
+  --text-secondary: rgba(255, 255, 255, 0.7);
+  --accent-blue: #6e8efa;
+  --accent-purple: #a78bfa;
+  --accent-pink: #d85893;
+  --accent-green: #87c2a5;
+  --shadow-color: rgba(0, 0, 0, 0.3);
+}
+
 /* Base styles for both full post and cards */
 .blog-post, .blog-post-card {
-    background-color: #fff;
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-    margin-bottom: 30px;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  background-color: var(--dark-surface);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+  margin-bottom: 30px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Card specific styles */
+.blog-post-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.blog-post-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.blog-post-thumbnail {
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+  position: relative;
+}
+
+.blog-post-thumbnail::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.3));
+  z-index: 1;
+}
+
+.blog-post-thumbnail img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.blog-post-card:hover .blog-post-thumbnail img {
+  transform: scale(1.05);
+}
+
+.blog-post-card-content {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.blog-post-title {
+  margin: 0;
+  font-size: 1.8rem;
+  color: var(--text-primary);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  margin-bottom: 10px;
+}
+
+.blog-post-meta {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.blog-post-excerpt {
+  color: var(--text-secondary);
+  margin-bottom: 20px;
+  flex-grow: 1;
+  line-height: 1.6;
+}
+
+.blog-post-card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto;
+}
+
+.blog-post-likes {
+  display: flex;
+  align-items: center;
+}
+
+.like-count {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.read-more-button {
+  display: inline-block;
+  padding: 10px 18px;
+  background-color: var(--accent-blue);
+  color: white;
+  text-decoration: none;
+  border-radius: 20px;
+  font-weight: 500;
+  text-align: center;
+  transition: all 0.3s ease;
+  font-size: 0.95rem;
+}
+
+.read-more-button:hover {
+  background-color: rgba(110, 142, 250, 0.85);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Full post styles */
+.blog-post {
+  margin-bottom: 40px;
+  position: relative;
+}
+
+.blog-post-image {
+  width: 100%;
+  max-height: 500px;
+  object-fit: cover;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.blog-post-content {
+  padding: 35px;
+}
+
+.blog-post-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.blog-post-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.edit-button,
+.delete-button {
+  padding: 8px 16px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  border: none;
+  transition: all 0.2s ease;
+}
+
+.edit-button {
+  background-color: var(--accent-blue);
+  color: white;
+}
+
+.edit-button:hover {
+  background-color: rgba(110, 142, 250, 0.85);
+  transform: translateY(-2px);
+}
+
+.delete-button {
+  background-color: rgba(255, 59, 48, 0.8);
+  color: white;
+}
+
+.delete-button:hover {
+  background-color: rgba(255, 59, 48, 0.95);
+  transform: translateY(-2px);
+}
+
+.blog-post-body {
+  line-height: 1.7;
+  color: var(--text-primary);
+  overflow: auto;
+  font-size: 1.05rem;
+}
+
+/* Image styling in content */
+.blog-post-body img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 10px;
+  margin: 25px 0;
+  display: inline-block;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+}
+
+.blog-post-body .blog-image-left {
+  float: left;
+  margin-right: 30px;
+  margin-bottom: 20px;
+  max-width: 40%;
+}
+
+.blog-post-body .blog-image-right {
+  float: right;
+  margin-left: 30px;
+  margin-bottom: 20px;
+  max-width: 40%;
+}
+
+.blog-post-body .blog-image-center {
+  display: block;
+  margin: 30px auto;
+  max-width: 80%;
+}
+
+.blog-post-body .blog-image-full {
+  display: block;
+  width: 100%;
+  margin: 30px 0;
+}
+
+/* Footer with like button */
+.blog-post-footer {
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.like-button {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-secondary);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 8px 16px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.like-button:hover {
+  background: rgba(255, 255, 255, 0.12);
+  transform: translateY(-2px);
+}
+
+.like-button.liked {
+  color: #ff2d55;
+  background: rgba(255, 45, 85, 0.1);
+  border-color: rgba(255, 45, 85, 0.2);
+}
+
+/* Delete confirmation dialog */
+.delete-confirmation {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(26, 26, 28, 0.9);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+  border-radius: 16px;
+  color: var(--text-primary);
+  text-align: center;
+  padding: 30px;
+  animation: fadeIn 0.3s ease;
+}
+
+.delete-confirmation p {
+  font-size: 1.1rem;
+  margin-bottom: 5px;
+}
+
+.confirmation-buttons {
+  display: flex;
+  gap: 15px;
+  margin-top: 25px;
+}
+
+.confirm-delete-button,
+.cancel-delete-button {
+  padding: 12px 24px;
+  border-radius: 25px;
+  cursor: pointer;
+  font-size: 1rem;
+  border: none;
+  transition: all 0.2s ease;
+  font-weight: 500;
+}
+
+.confirm-delete-button {
+  background-color: rgba(255, 59, 48, 0.8);
+  color: white;
+}
+
+.confirm-delete-button:hover {
+  background-color: rgba(255, 59, 48, 0.95);
+  transform: translateY(-2px);
+}
+
+.cancel-delete-button {
+  background-color: rgba(142, 142, 147, 0.3);
+  color: var(--text-primary);
+}
+
+.cancel-delete-button:hover {
+  background-color: rgba(142, 142, 147, 0.4);
+  transform: translateY(-2px);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .blog-post-body .blog-image-left,
+  .blog-post-body .blog-image-right {
+    float: none;
+    display: block;
+    margin: 20px auto;
+    max-width: 100%;
   }
   
-  /* Card specific styles */
-  .blog-post-card {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-  }
-  
-  .blog-post-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-  }
-  
-  .blog-post-thumbnail {
-    width: 100%;
-    height: 200px;
-    overflow: hidden;
-  }
-  
-  .blog-post-thumbnail img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.3s ease;
-  }
-  
-  .blog-post-card:hover .blog-post-thumbnail img {
-    transform: scale(1.05);
-  }
-  
-  .blog-post-card-content {
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1;
-  }
-  
-  .blog-post-excerpt {
-    color: #666;
-    margin-bottom: 15px;
-    flex-grow: 1;
-    line-height: 1.5;
-  }
-  
-  .read-more-button {
-    display: inline-block;
-    padding: 8px 16px;
-    background-color: #0071e3;
-    color: white;
-    text-decoration: none;
-    border-radius: 20px;
-    font-weight: 500;
-    text-align: center;
-    transition: background-color 0.3s ease;
-  }
-  
-  .read-more-button:hover {
-    background-color: #0058b3;
-  }
-  
-  /* Full post styles */
-  .blog-post {
-    margin-bottom: 40px;
-    position: relative;
-  }
-  
-  .blog-post-image {
-    width: 100%;
-    max-height: 500px;
-    object-fit: cover;
-  }
-  
-  .blog-post-content {
-    padding: 30px;
+  .blog-post-body .blog-image-center,
+  .blog-post-body .blog-image-full {
+    max-width: 100%;
   }
   
   .blog-post-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 15px;
-  }
-  
-  .blog-post-title {
-    margin: 0;
-    font-size: 1.8rem;
-    color: #111;
-    font-weight: 600;
+    flex-direction: column;
+    align-items: flex-start;
   }
   
   .blog-post-actions {
-    display: flex;
-    gap: 10px;
+    margin-top: 15px;
   }
   
-  .edit-button,
-  .delete-button {
-    padding: 8px 16px;
-    border-radius: 20px;
-    cursor: pointer;
-    font-size: 0.9rem;
-    border: none;
-    transition: all 0.2s ease;
+  .blog-post-content {
+    padding: 25px;
   }
-  
-  .edit-button {
-    background-color: #0071e3;
-    color: white;
-  }
-  
-  .edit-button:hover {
-    background-color: #0058b3;
-  }
-  
-  .delete-button {
-    background-color: #ff3b30;
-    color: white;
-  }
-  
-  .delete-button:hover {
-    background-color: #d22d22;
-  }
-  
-  .blog-post-meta {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 20px;
-    color: #777;
-    font-size: 0.9rem;
-  }
-  
-  .blog-post-body {
-    line-height: 1.6;
-    color: #333;
-    overflow: auto;
-  }
-  
-  /* Image styling in content */
-  .blog-post-body img {
-    max-width: 100%;
-    height: auto;
-    border-radius: 8px;
-    margin: 20px 0;
-    display: inline-block;
-  }
-  
-  .blog-post-body .blog-image-left {
-    float: left;
-    margin-right: 25px;
-    margin-bottom: 15px;
-    max-width: 40%;
-  }
-  
-  .blog-post-body .blog-image-right {
-    float: right;
-    margin-left: 25px;
-    margin-bottom: 15px;
-    max-width: 40%;
-  }
-  
-  .blog-post-body .blog-image-center {
-    display: block;
-    margin: 25px auto;
-    max-width: 80%;
-  }
-  
-  .blog-post-body .blog-image-full {
-    display: block;
-    width: 100%;
-    margin: 25px 0;
-  }
-  
-  /* Delete confirmation dialog */
-  .delete-confirmation {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.8);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    z-index: 10;
-    border-radius: 12px;
-    color: white;
-    text-align: center;
-    padding: 20px;
-  }
-  
-  .confirmation-buttons {
-    display: flex;
-    gap: 15px;
-    margin-top: 20px;
-  }
-  
-  .confirm-delete-button,
-  .cancel-delete-button {
-    padding: 10px 20px;
-    border-radius: 20px;
-    cursor: pointer;
-    font-size: 1rem;
-    border: none;
-    transition: all 0.2s ease;
-  }
-  
-  .confirm-delete-button {
-    background-color: #ff3b30;
-    color: white;
-  }
-  
-  .confirm-delete-button:hover {
-    background-color: #d22d22;
-  }
-  
-  .cancel-delete-button {
-    background-color: #8e8e93;
-    color: white;
-  }
-  
-  .cancel-delete-button:hover {
-    background-color: #636366;
-  }
-  
-  /* Responsive styles */
-  @media (max-width: 768px) {
-    .blog-post-body .blog-image-left,
-    .blog-post-body .blog-image-right {
-      float: none;
-      display: block;
-      margin: 20px auto;
-      max-width: 100%;
-    }
-    
-    .blog-post-body .blog-image-center,
-    .blog-post-body .blog-image-full {
-      max-width: 100%;
-    }
-    
-    .blog-post-header {
-      flex-direction: column;
-      align-items: flex-start;
-    }
-    
-    .blog-post-actions {
-      margin-top: 15px;
-    }
-  }
+}
