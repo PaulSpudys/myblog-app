@@ -1,16 +1,35 @@
+/* Dark Theme with Apple-inspired design and pastel accents */
+:root {
+  --dark-bg: #1a1a1c;
+  --dark-surface: #2a2a2e;
+  --dark-elevated: #323236;
+  --text-primary: #f5f5f7;
+  --text-secondary: rgba(255, 255, 255, 0.7);
+  --accent-blue: #6e8efa;
+  --accent-purple: #a78bfa;
+  --accent-pink: #d85893;
+  --accent-green: #87c2a5;
+  --shadow-color: rgba(0, 0, 0, 0.3);
+}
+
+body {
+  background-color: var(--dark-bg);
+  color: var(--text-primary);
+}
+
 .home-container {
   width: 100%;
 }
 
-/* Hero Section - Making it thinner */
+/* Hero Section - Dark theme */
 .hero-section {
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
-  min-height: 300px; /* Reduced from 500px */
-  background: linear-gradient(to bottom, #f5f5f7, #fff);
-  padding: 40px 20px; /* Reduced from 60px top/bottom */
+  min-height: 300px;
+  background: linear-gradient(to bottom, var(--dark-elevated), var(--dark-bg));
+  padding: 40px 20px;
 }
 
 .hero-content {
@@ -19,24 +38,24 @@
 }
 
 .hero-title {
-  font-size: 3rem; /* Slightly smaller */
+  font-size: 3rem;
   font-weight: 600;
-  color: #1d1d1f;
-  margin-bottom: 15px; /* Reduced from 20px */
+  color: var(--text-primary);
+  margin-bottom: 15px;
   letter-spacing: -0.02em;
 }
 
 .hero-subtitle {
-  font-size: 1.3rem; /* Slightly smaller */
-  color: #6e6e73;
-  margin-bottom: 20px; /* Reduced from 40px */
+  font-size: 1.3rem;
+  color: var(--text-secondary);
+  margin-bottom: 20px;
   line-height: 1.4;
 }
 
-/* Featured Section - Making it larger and more proportionate */
+/* Featured Section - Dark theme with pastel accents */
 .featured-section {
   padding: 60px 20px;
-  background-color: #fff;
+  background-color: var(--dark-bg);
   max-width: 1200px;
   margin: 0 auto;
 }
@@ -50,43 +69,37 @@
 
 .featured-item {
   flex: 1;
-  background-color: #f5f5f7;
+  background-color: var(--dark-surface);
   border-radius: 20px;
   overflow: hidden;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 8px 30px var(--shadow-color);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  min-height: 400px; /* Increased from 300px */
+  min-height: 400px;
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
-  min-width: 300px; /* Ensure minimum width even when stacked */
-  max-width: 600px; /* Limit maximum width */
+  min-width: 300px;
+  max-width: 600px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 .featured-item:hover {
   transform: translateY(-10px);
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 15px 40px var(--shadow-color);
 }
 
 .featured-item.his-blog {
-  background-image: linear-gradient(135deg, #6b8cce, #4b6cb7);
-  color: white;
-  /* You can add a background image here */
-  /* background-image: url('/path/to/his-blog-image.jpg'), linear-gradient(135deg, #6b8cce, #4b6cb7); */
-  /* background-size: cover; */
-  /* background-position: center; */
-  /* background-blend-mode: overlay; */
+  background: linear-gradient(135deg, rgba(110, 142, 250, 0.2), rgba(75, 108, 183, 0.2));
+  border: 1px solid rgba(110, 142, 250, 0.3);
+  color: var(--text-primary);
 }
 
 .featured-item.her-blog {
-  background-image: linear-gradient(135deg, #e48ebb, #d05a91);
-  color: white;
-  /* You can add a background image here */
-  /* background-image: url('/path/to/her-blog-image.jpg'), linear-gradient(135deg, #e48ebb, #d05a91); */
-  /* background-size: cover; */
-  /* background-position: center; */
-  /* background-blend-mode: overlay; */
+  background: linear-gradient(135deg, rgba(216, 88, 147, 0.2), rgba(208, 90, 145, 0.2));
+  border: 1px solid rgba(216, 88, 147, 0.3);
+  color: var(--text-primary);
 }
 
 .featured-content {
@@ -97,37 +110,60 @@
 }
 
 .featured-content h3 {
-  font-size: 2.5rem; /* Larger */
+  font-size: 2.5rem;
   margin-bottom: 20px;
   font-weight: 600;
+}
+
+.featured-item.his-blog h3 {
+  color: var(--accent-blue);
+}
+
+.featured-item.her-blog h3 {
+  color: var(--accent-pink);
 }
 
 .featured-content p {
   margin-bottom: 30px;
   line-height: 1.5;
-  font-size: 1.2rem; /* Slightly larger */
+  font-size: 1.2rem;
+  color: var(--text-secondary);
 }
 
 .learn-more {
   display: inline-block;
-  padding: 12px 28px; /* Larger button */
-  background-color: rgba(255, 255, 255, 0.2);
-  color: white;
+  padding: 12px 28px;
   border-radius: 30px;
   text-decoration: none;
   font-weight: 500;
   font-size: 1.1rem;
-  transition: background-color 0.2s;
+  transition: all 0.2s;
 }
 
-.learn-more:hover {
-  background-color: rgba(255, 255, 255, 0.3);
+.his-blog .learn-more {
+  background-color: rgba(110, 142, 250, 0.2);
+  color: var(--accent-blue);
+  border: 1px solid rgba(110, 142, 250, 0.3);
 }
 
-/* About Section */
+.his-blog .learn-more:hover {
+  background-color: rgba(110, 142, 250, 0.3);
+}
+
+.her-blog .learn-more {
+  background-color: rgba(216, 88, 147, 0.2);
+  color: var(--accent-pink);
+  border: 1px solid rgba(216, 88, 147, 0.3);
+}
+
+.her-blog .learn-more:hover {
+  background-color: rgba(216, 88, 147, 0.3);
+}
+
+/* About Section - Dark theme */
 .about-section {
   padding: 80px 20px;
-  background-color: #f5f5f7;
+  background-color: var(--dark-surface);
   text-align: center;
 }
 
@@ -139,7 +175,7 @@
 .section-title {
   font-size: 2.5rem;
   font-weight: 600;
-  color: #1d1d1f;
+  color: var(--text-primary);
 }
 
 .about-content {
@@ -150,24 +186,26 @@
 .about-content p {
   font-size: 1.2rem;
   line-height: 1.6;
-  color: #1d1d1f;
+  color: var(--text-secondary);
   margin-bottom: 30px;
 }
 
 .contact-button {
   display: inline-block;
   padding: 12px 24px;
-  background-color: #0071e3;
+  background-color: var(--accent-blue);
   color: white;
   border-radius: 30px;
   text-decoration: none;
   font-weight: 500;
   font-size: 1.1rem;
-  transition: background-color 0.2s;
+  transition: all 0.2s;
+  border: none;
 }
 
 .contact-button:hover {
-  background-color: #0058b3;
+  background-color: rgba(110, 142, 250, 0.8);
+  transform: translateY(-2px);
 }
 
 /* Responsive Adjustments */
@@ -179,13 +217,13 @@
   
   .featured-item {
     width: 100%;
-    max-width: 500px; /* Adjust maximum width when stacked */
+    max-width: 500px;
   }
 }
 
 @media (max-width: 768px) {
   .hero-section {
-    min-height: 200px; /* Even smaller on mobile */
+    min-height: 200px;
   }
   
   .hero-title {
@@ -215,6 +253,6 @@
   }
   
   .featured-item {
-    min-height: 300px; /* Smaller height on very small screens */
+    min-height: 300px;
   }
 }
