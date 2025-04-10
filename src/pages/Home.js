@@ -2,8 +2,8 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import './Home.css';
 // Import your background images
-import hisBackgroundImage from '../assets/images/his.png'; // Create this path based on your project structure
-import herBackgroundImage from '../assets/images/her-background.jpg'; // Create this path based on your project structure
+import hisBackgroundImage from '../assets/images/his.png';
+import herBackgroundImage from '../assets/images/her.png';
 
 function Home() {
   return (
@@ -21,29 +21,37 @@ function Home() {
       {/* Featured Posts Section */}
       <section className="featured-section">
         <div className="featured-grid">
-          {/* His Blog with custom background image */}
-          <div 
-            className="featured-item his-blog"
-            style={{ backgroundImage: `linear-gradient(135deg, rgba(110, 142, 250, 0.7), rgba(75, 108, 183, 0.7)), url(${hisBackgroundImage})` }}
+          {/* His Blog with direct background image - no overlay */}
+          <Link 
+            to="/his-blog" 
+            className="featured-item" 
+            style={{
+              backgroundImage: `url(${hisBackgroundImage})`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center'
+            }}
           >
-            <div className="featured-content">
+            <div className="text-content">
               <h3>His Blog</h3>
               <p>Explore topics related to technology, sports, and personal development.</p>
-              <Link to="/his-blog" className="learn-more">Read More</Link>
             </div>
-          </div>
+          </Link>
           
-          {/* Her Blog with custom background image */}
-          <div 
-            className="featured-item her-blog"
-            style={{ backgroundImage: `linear-gradient(135deg, rgba(216, 88, 147, 0.7), rgba(208, 90, 145, 0.7)), url(${herBackgroundImage})` }}
+          {/* Her Blog with direct background image - no overlay */}
+          <Link 
+            to="/her-blog" 
+            className="featured-item" 
+            style={{
+              backgroundImage: `url(${herBackgroundImage})`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center'
+            }}
           >
-            <div className="featured-content">
+            <div className="text-content">
               <h3>Her Blog</h3>
               <p>Discover content about lifestyle, travel, and creative pursuits.</p>
-              <Link to="/her-blog" className="learn-more">Read More</Link>
             </div>
-          </div>
+          </Link>
         </div>
       </section>
 
