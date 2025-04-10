@@ -1,6 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import './Home.css';
+// Import your background images
+import hisBackgroundImage from '../assets/images/his.png';
+import herBackgroundImage from '../assets/images/her.png';
 
 function Home() {
   return (
@@ -18,20 +21,37 @@ function Home() {
       {/* Featured Posts Section */}
       <section className="featured-section">
         <div className="featured-grid">
-          <div className="featured-item his-blog">
-            <div className="featured-content">
+          {/* His Blog with direct background image - no overlay */}
+          <Link 
+            to="/his-blog" 
+            className="featured-item" 
+            style={{
+              backgroundImage: `url(${hisBackgroundImage})`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center'
+            }}
+          >
+            <div className="text-content">
               <h3>His Blog</h3>
               <p>Explore topics related to technology, sports, and personal development.</p>
-              <Link to="/his-blog" className="learn-more">Read More</Link>
             </div>
-          </div>
-          <div className="featured-item her-blog">
-            <div className="featured-content">
+          </Link>
+          
+          {/* Her Blog with direct background image - no overlay */}
+          <Link 
+            to="/her-blog" 
+            className="featured-item" 
+            style={{
+              backgroundImage: `url(${herBackgroundImage})`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center'
+            }}
+          >
+            <div className="text-content">
               <h3>Her Blog</h3>
               <p>Discover content about lifestyle, travel, and creative pursuits.</p>
-              <Link to="/her-blog" className="learn-more">Read More</Link>
             </div>
-          </div>
+          </Link>
         </div>
       </section>
 
