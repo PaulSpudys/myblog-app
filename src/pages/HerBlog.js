@@ -93,7 +93,7 @@ function HerBlog() {
   return (
     <div className="blog-page-container">
       <div className="blog-header">
-        <h1 className="blog-title">Her Blog</h1>
+        <h1 className="blog-title">Simona's Blog</h1>
         <p className="blog-description">
           Adventures, inspirations, and musings about lifestyle, travel, and creative pursuits.
         </p>

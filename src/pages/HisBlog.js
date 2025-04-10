@@ -93,9 +93,9 @@ function HisBlog() {
   return (
     <div className="blog-page-container">
       <div className="blog-header">
-        <h1 className="blog-title">His Blog</h1>
+        <h1 className="blog-title">Paul's Blog</h1>
         <p className="blog-description">
-          Thoughts, ideas, and stories about technology, sports, and personal development.
+          Thoughts, ideas, and stories about technology, outdoors, and personal development.
         </p>
       </div>
 

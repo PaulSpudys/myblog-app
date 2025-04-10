@@ -36,7 +36,7 @@ function Navbar() {
     <nav className={`navbar ${scrolled ? 'scrolled' : ''}`}>
       <div className="navbar-container">
         <Link to="/" className="navbar-logo">
-          OurBlog
+          Our blog
         </Link>
         
         {/* Mobile Menu Button */}
@@ -53,9 +53,9 @@ function Navbar() {
         {/* Navigation Links */}
         <ul className={`nav-menu ${menuOpen ? 'open' : ''}`}>
           <li className="nav-item">
-            <Link to="/" className="nav-link" onClick={() => setMenuOpen(false)}>
+            {/* <Link to="/" className="nav-link" onClick={() => setMenuOpen(false)}>
               Home
-            </Link>
+            </Link> */}
           </li>
           <li className="nav-item">
             <Link to="/his-blog" className="nav-link" onClick={() => setMenuOpen(false)}>
