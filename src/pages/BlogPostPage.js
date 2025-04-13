@@ -4,6 +4,7 @@ import { doc, getDoc } from 'firebase/firestore';
 import { db } from '../firebase/firebase';
 import BlogPost from '../components/BlogPost';
 import CommentSection from '../components/CommentSection';
+import EditPost from '../components/EditPost';
 import './BlogPage.css';
 
 function BlogPostPage() {
@@ -12,17 +13,18 @@ function BlogPostPage() {
   const [post, setPost] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [editingPostId, setEditingPostId] = useState(null);
 
   useEffect(() => {
     const fetchPost = async () => {
       try {
         if (!postId) {
-          setError("Post ID is missing");
+          setError('Post ID is missing');
           setLoading(false);
           return;
         }
 
-        const postDoc = await getDoc(doc(db, "blogPosts", postId));
+        const postDoc = await getDoc(doc(db, 'blogPosts', postId));
         
         if (postDoc.exists()) {
           setPost({
@@ -30,11 +32,11 @@ function BlogPostPage() {
             ...postDoc.data()
           });
         } else {
-          setError("Post not found");
+          setError('Post not found');
         }
       } catch (err) {
-        console.error("Error fetching post:", err);
-        setError("Error loading post");
+        console.error('Error fetching post:', err);
+        setError('Error loading post');
       } finally {
         setLoading(false);
       }
@@ -43,20 +45,61 @@ function BlogPostPage() {
     fetchPost();
   }, [postId]);
 
-  const handleGoBack = () => {
-    navigate(-1); // Go back to previous page
+  const handleEditPost = (postId) => {
+    console.log('handleEditPost triggered:', { postId });
+    setEditingPostId(postId);
   };
+
+  const handleGoBack = () => {
+    navigate(-1);
+  };
+
+  const handlePostUpdated = () => {
+    console.log('handlePostUpdated triggered');
+    setEditingPostId(null);
+    // Refresh post data
+    const fetchPost = async () => {
+      try {
+        const postDoc = await getDoc(doc(db, 'blogPosts', postId));
+        if (postDoc.exists()) {
+          setPost({
+            id: postDoc.id,
+            ...postDoc.data()
+          });
+        }
+      } catch (err) {
+        console.error('Error refreshing post:', err);
+      }
+    };
+    fetchPost();
+  };
+
+  console.log('Rendering BlogPostPage:', { postId, editingPostId, postExists: !!post });
 
   if (loading) {
     return <div className="loading">Loading post...</div>;
   }
 
+  if (editingPostId) {
+    console.log('Showing EditPost component:', { editingPostId });
+    return (
+      <EditPost
+        postId={editingPostId}
+        onCancel={() => {
+          console.log('EditPost cancelled');
+          setEditingPostId(null);
+        }}
+        onPostUpdated={handlePostUpdated}
+      />
+    );
+  }
+
   if (error || !post) {
     return (
       <div className="blog-single-post-container">
-        <div className="error">{error || "Post not found"}</div>
+        <div className="error">{error || 'Post not found'}</div>
         <button onClick={handleGoBack} className="back-button">
-          &larr; Go back
+          ← Go back
         </button>
       </div>
     );
@@ -65,7 +108,7 @@ function BlogPostPage() {
   return (
     <div className="blog-single-post-container">
       <button onClick={handleGoBack} className="back-button">
-        &larr; Back
+        ← Back
       </button>
       <BlogPost
         id={post.id}
@@ -80,6 +123,7 @@ function BlogPostPage() {
         imageUrl={post.imageUrl}
         images={post.images || []}
         likes={post.likes || 0}
+        onEdit={handleEditPost}
       />
       <CommentSection postId={post.id} />
     </div>
