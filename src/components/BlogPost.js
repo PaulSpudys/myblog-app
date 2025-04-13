@@ -72,12 +72,12 @@ function BlogPost({ id, title, date, author, content, imageUrl, images, likes = 
       if (!currentUser) return;
       
       try {
-        const likesRef = doc(db, "postLikes", `${id}_${currentUser.uid}`);
+        const likesRef = doc(db, 'postLikes', `${id}_${currentUser.uid}`);
         const likeDoc = await getDoc(likesRef);
         setHasLiked(likeDoc.exists());
         console.log('Checked like for post:', id, 'exists:', likeDoc.exists());
       } catch (error) {
-        console.error("Error checking likes:", error);
+        console.error('Error checking likes:', error);
       }
     };
     
@@ -86,16 +86,16 @@ function BlogPost({ id, title, date, author, content, imageUrl, images, likes = 
 
   const handleLike = async () => {
     if (!currentUser) {
-      alert("Please log in to like posts");
+      alert('Please log in to like posts');
       return;
     }
     
     console.log('Handling like for post:', id, 'by user:', currentUser.uid);
     
     try {
-      const postRef = doc(db, "blogPosts", id);
+      const postRef = doc(db, 'blogPosts', id);
       const likeId = `${id}_${currentUser.uid}`;
-      const likesRef = doc(db, "postLikes", likeId);
+      const likesRef = doc(db, 'postLikes', likeId);
       
       // First check if the like document exists
       const likeDoc = await getDoc(likesRef);
@@ -135,14 +135,17 @@ function BlogPost({ id, title, date, author, content, imageUrl, images, likes = 
         }
       }
     } catch (error) {
-      console.error("Error updating likes:", error);
-      alert("Failed to update like. Please try again.");
+      console.error('Error updating likes:', error);
+      alert('Failed to update like. Please try again.');
     }
   };
 
   const handleEdit = () => {
+    console.log('BlogPost handleEdit triggered:', { id, title });
     if (onEdit) {
       onEdit(id);
+    } else {
+      console.error('onEdit prop not provided in BlogPost');
     }
   };
 
@@ -157,13 +160,13 @@ function BlogPost({ id, title, date, author, content, imageUrl, images, likes = 
   const handleConfirmDelete = async () => {
     setIsDeleting(true);
     try {
-      await deleteDoc(doc(db, "blogPosts", id));
+      await deleteDoc(doc(db, 'blogPosts', id));
       // The parent component will refetch posts after deletion
       setIsDeleting(false);
       setShowConfirmDelete(false);
     } catch (error) {
-      console.error("Error deleting post:", error);
-      alert("Failed to delete post. Please try again.");
+      console.error('Error deleting post:', error);
+      alert('Failed to delete post. Please try again.');
       setIsDeleting(false);
     }
   };
