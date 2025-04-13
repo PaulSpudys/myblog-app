@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '../firebase/firebase';
 import { BlogPostCard } from '../components/BlogPost';
-import BlogPost from '../components/BlogPost';
 import EditPost from '../components/EditPost';
 import './BlogPage.css';
 
@@ -31,6 +30,8 @@ function HisBlog() {
         });
       });
       
+      console.log('Fetched posts for HisBlog:', fetchedPosts);
+      
       // Sort the posts client-side by date
       fetchedPosts.sort((a, b) => {
         // Handle different date formats
@@ -55,7 +56,7 @@ function HisBlog() {
         setPosts(hisPosts);
         setError("Using locally stored posts. Firestore connection failed.");
       } catch (localErr) {
-        setError("Failed to load blog posts from any source. Please try again later.");
+        setError("Failed to load blog posts from any source. Please try again.");
       }
     } finally {
       setLoading(false);
@@ -65,10 +66,6 @@ function HisBlog() {
   useEffect(() => {
     fetchPosts();
   }, []);
-
-  const handleEditPost = (postId) => {
-    setEditingPostId(postId);
-  };
 
   // After a post is edited or deleted, refresh the posts
   const handlePostChanged = () => {
@@ -104,21 +101,20 @@ function HisBlog() {
       <div className="blog-posts-grid">
         {posts.length > 0 ? (
           posts.map(post => (
-            // In both HisBlog.js and HerBlog.js, update the BlogPostCard rendering:
             <BlogPostCard
-            key={post.id}
-            id={post.id}
-            title={post.title}
-            date={post.date instanceof Date 
+              key={post.id}
+              id={post.id}
+              title={post.title}
+              date={post.date instanceof Date 
                 ? post.date.toLocaleDateString() 
                 : post.date.toDate 
                 ? post.date.toDate().toLocaleDateString()
                 : new Date(post.date).toLocaleDateString()}
-            author={post.author === 'him' ? 'Him' : 'Her'}
-            content={post.content}
-            imageUrl={post.imageUrl}
-            excerpt={post.excerpt}
-            likes={post.likes || 0}
+              author={post.author}
+              content={post.content}
+              imageUrl={post.imageUrl}
+              excerpt={post.excerpt}
+              likes={post.likes || 0}
             />
           ))
         ) : (

@@ -31,6 +31,8 @@ function HerBlog() {
         });
       });
       
+      console.log('Fetched posts for HerBlog:', fetchedPosts);
+      
       // Sort the posts client-side by date
       fetchedPosts.sort((a, b) => {
         // Handle different date formats
@@ -55,7 +57,7 @@ function HerBlog() {
         setPosts(herPosts);
         setError("Using locally stored posts. Firestore connection failed.");
       } catch (localErr) {
-        setError("Failed to load blog posts from any source. Please try again later.");
+        setError("Failed to load blog posts from any source. Please try again.");
       }
     } finally {
       setLoading(false);
@@ -104,21 +106,20 @@ function HerBlog() {
       <div className="blog-posts-grid">
         {posts.length > 0 ? (
           posts.map(post => (
-            // In both HisBlog.js and HerBlog.js, update the BlogPostCard rendering:
             <BlogPostCard
-            key={post.id}
-            id={post.id}
-            title={post.title}
-            date={post.date instanceof Date 
+              key={post.id}
+              id={post.id}
+              title={post.title}
+              date={post.date instanceof Date 
                 ? post.date.toLocaleDateString() 
                 : post.date.toDate 
                 ? post.date.toDate().toLocaleDateString()
                 : new Date(post.date).toLocaleDateString()}
-            author={post.author === 'him' ? 'Him' : 'Her'}
-            content={post.content}
-            imageUrl={post.imageUrl}
-            excerpt={post.excerpt}
-            likes={post.likes || 0}
+              author={post.author}
+              content={post.content}
+              imageUrl={post.imageUrl}
+              excerpt={post.excerpt}
+              likes={post.likes || 0}
             />
           ))
         ) : (

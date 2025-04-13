@@ -1,41 +1,177 @@
 .text-editor-toolbar {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 5px;
-    margin-bottom: 10px;
-    padding: 5px;
-    background-color: #f5f5f5;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-  }
-  
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-bottom: 10px;
+  padding: 8px;
+  background-color: #2a2a2e; /* Dark background */
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+}
+
+.toolbar-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 36px;
+  height: 36px;
+  font-size: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background-color: #323236; /* Dark button background */
+  color: #f5f5f7; /* Light text */
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 0 10px;
+}
+
+.toolbar-button:hover {
+  background-color: #424246;
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.toolbar-button:active {
+  background-color: #4e4e52;
+}
+
+/* Dropdown container styles */
+.dropdown-container {
+  position: relative;
+  display: inline-block;
+}
+
+/* Special styles for font family and size buttons */
+.font-button, .font-size-button, .color-button {
+  width: auto;
+  min-width: 70px;
+  padding: 0 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 5px;
+}
+
+.button-icon {
+  font-weight: 500;
+  color: #f5f5f7;
+}
+
+.dropdown-arrow {
+  font-size: 10px;
+  color: #f5f5f7;
+  margin-left: 3px;
+}
+
+/* Dropdown menu styles */
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 100;
+  min-width: 180px;
+  background-color: #2a2a2e; /* Dark background */
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  max-height: 300px;
+  overflow-y: auto;
+  padding: 5px 0;
+  margin-top: 5px;
+}
+
+.font-menu {
+  width: 200px;
+}
+
+.size-menu {
+  width: 100px;
+}
+
+.dropdown-item {
+  display: block;
+  width: 100%;
+  padding: 8px 12px;
+  text-align: left;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  color: #f5f5f7; /* Light text */
+}
+
+.dropdown-item:hover {
+  background-color: #424246;
+}
+
+/* Color picker specific styles */
+.color-icon {
+  display: inline-block;
+  font-weight: 500;
+  color: #f5f5f7;
+}
+
+.color-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 6px;
+  padding: 10px;
+  width: 200px;
+}
+
+.color-option {
+  width: 30px;
+  height: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.color-option:hover {
+  transform: scale(1.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  z-index: 1;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* Custom scrollbar for dropdowns */
+.dropdown-menu::-webkit-scrollbar {
+  width: 8px;
+}
+
+.dropdown-menu::-webkit-scrollbar-track {
+  background: #323236;
+}
+
+.dropdown-menu::-webkit-scrollbar-thumb {
+  background: #4a4a4e;
+  border-radius: 4px;
+}
+
+.dropdown-menu::-webkit-scrollbar-thumb:hover {
+  background: #5a5a5e;
+}
+
+@media (max-width: 600px) {
   .toolbar-button {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 36px;
-    height: 36px;
-    font-size: 1rem;
-    border: 1px solid #ddd;
-    background-color: white;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: all 0.2s ease;
+    min-width: 32px;
+    height: 32px;
+    font-size: 0.9rem;
+    padding: 0 8px;
   }
   
-  .toolbar-button:hover {
-    background-color: #f0f0f0;
-    border-color: #aaa;
+  .font-button, .font-size-button, .color-button {
+    min-width: 60px;
   }
   
-  .toolbar-button:active {
-    background-color: #e0e0e0;
+  .dropdown-menu {
+    min-width: 150px;
   }
   
-  @media (max-width: 600px) {
-    .toolbar-button {
-      width: 32px;
-      height: 32px;
-      font-size: 0.9rem;
-    }
+  .color-grid {
+    width: 180px;
+    grid-template-columns: repeat(4, 1fr);
   }
+}

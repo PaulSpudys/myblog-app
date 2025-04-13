@@ -18,6 +18,9 @@ export function BlogPostCard({ id, title, date, author, content, imageUrl, excer
     e.target.style.display = 'none'; // Hide the image if it fails to load
   };
 
+  // Normalize author for display
+  const displayAuthor = author.toLowerCase() === 'him' ? 'Him' : 'Her';
+
   return (
     <div className="blog-post-card">
       <div className="blog-post-thumbnail">
@@ -26,7 +29,7 @@ export function BlogPostCard({ id, title, date, author, content, imageUrl, excer
       <div className="blog-post-card-content">
         <h2 className="blog-post-title">{title}</h2>
         <div className="blog-post-meta">
-          <span className="blog-post-author">By {author}</span>
+          <span className="blog-post-author">By {displayAuthor}</span>
           <span className="blog-post-date">{date}</span>
         </div>
         <p className="blog-post-excerpt">{defaultExcerpt}</p>
@@ -49,11 +52,19 @@ function BlogPost({ id, title, date, author, content, imageUrl, images, likes = 
   const [likeCount, setLikeCount] = useState(likes);
   const [hasLiked, setHasLiked] = useState(false);
   
+  // Normalize author for logic
+  const normalizedAuthor = author.toLowerCase();
+
+  // Enhanced debug logging
+  console.log('BlogPost props:', { id, title, author, normalizedAuthor, currentUserEmail: currentUser?.email, likes });
+
   // Check if the current user is authorized to edit/delete this post
   const canModify = currentUser && (
-    (author === 'Him' && currentUser.email === 'pauliusss_s@yahoo.com') || 
-    (author === 'Her' && currentUser.email === 'simonasiniauskaite@gmail.com')
+    (normalizedAuthor === 'him' && currentUser.email === 'pauliusss_s@yahoo.com') || 
+    (normalizedAuthor === 'her' && currentUser.email === 'simonasiniauskaite@gmail.com')
   );
+
+  console.log('canModify:', canModify, { normalizedAuthor, userEmail: currentUser?.email });
 
   // Check if the user has already liked this post
   useEffect(() => {
@@ -64,6 +75,7 @@ function BlogPost({ id, title, date, author, content, imageUrl, images, likes = 
         const likesRef = doc(db, "postLikes", `${id}_${currentUser.uid}`);
         const likeDoc = await getDoc(likesRef);
         setHasLiked(likeDoc.exists());
+        console.log('Checked like for post:', id, 'exists:', likeDoc.exists());
       } catch (error) {
         console.error("Error checking likes:", error);
       }
@@ -78,6 +90,8 @@ function BlogPost({ id, title, date, author, content, imageUrl, images, likes = 
       return;
     }
     
+    console.log('Handling like for post:', id, 'by user:', currentUser.uid);
+    
     try {
       const postRef = doc(db, "blogPosts", id);
       const likeId = `${id}_${currentUser.uid}`;
@@ -85,11 +99,12 @@ function BlogPost({ id, title, date, author, content, imageUrl, images, likes = 
       
       // First check if the like document exists
       const likeDoc = await getDoc(likesRef);
+      console.log('Like doc exists:', likeDoc.exists());
       
       if (!hasLiked) {
         // Only create a like if it doesn't already exist
         if (!likeDoc.exists()) {
-          // Add like to post counter
+          console.log('Adding like');
           await updateDoc(postRef, {
             likes: increment(1)
           });
@@ -107,6 +122,7 @@ function BlogPost({ id, title, date, author, content, imageUrl, images, likes = 
       } else {
         // Remove like (only if it exists)
         if (likeDoc.exists()) {
+          console.log('Removing like');
           await updateDoc(postRef, {
             likes: increment(-1)
           });
@@ -120,6 +136,7 @@ function BlogPost({ id, title, date, author, content, imageUrl, images, likes = 
       }
     } catch (error) {
       console.error("Error updating likes:", error);
+      alert("Failed to update like. Please try again.");
     }
   };
 
@@ -166,6 +183,9 @@ function BlogPost({ id, title, date, author, content, imageUrl, images, likes = 
   // Check if the image is already in the content to avoid duplicate display
   const showMainImage = imageUrl && !content?.includes(imageUrl);
 
+  // Normalize author for display
+  const displayAuthor = normalizedAuthor === 'him' ? 'Him' : 'Her';
+
   return (
     <div className="blog-post">
       {/* Only display the main image if it's not already in the content */}
@@ -192,7 +212,7 @@ function BlogPost({ id, title, date, author, content, imageUrl, images, likes = 
           )}
         </div>
         <div className="blog-post-meta">
-          <span className="blog-post-author">By {author}</span>
+          <span className="blog-post-author">By {displayAuthor}</span>
           <span className="blog-post-date">{date}</span>
         </div>
         

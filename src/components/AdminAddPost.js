@@ -56,13 +56,56 @@ function AdminAddPost() {
     }));
   };
   
-  const handleFormatText = (tag) => {
+  /**
+   * Handles text formatting operations including standard HTML tags and CSS styling
+   * @param {string} tag - The tag to apply (HTML tag or CSS property name)
+   * @param {string} value - The value for CSS properties (used for font, size, color)
+   */
+  const handleFormatText = (tag, value) => {
     if (!textareaRef.current) return;
     
     const textarea = textareaRef.current;
     const { start, end } = cursorPosition;
     const currentContent = formData.content;
     
+    // Handle font family, font size, and color - these need the value parameter
+    if (tag === 'fontFamily' || tag === 'fontSize' || tag === 'color') {
+      if (start === end) {
+        // If no text is selected, show a message
+        alert("Please select some text before applying " + 
+          (tag === 'fontFamily' ? 'font family' : 
+           tag === 'fontSize' ? 'font size' : 'color'));
+        return;
+      } else {
+        // If text is selected, wrap it with the styled span
+        const styleAttr = tag === 'fontFamily' ? 'font-family' : tag === 'fontSize' ? 'font-size' : 'color';
+        const newContent = 
+          currentContent.substring(0, start) + 
+          `<span style="${styleAttr}: ${value}">` + 
+          currentContent.substring(start, end) + 
+          `</span>` + 
+          currentContent.substring(end);
+        
+        setFormData(prev => ({
+          ...prev,
+          content: newContent
+        }));
+        
+        // Position cursor after the formatted text
+        const newCursorPos = end + `<span style="${styleAttr}: ${value}">`.length + 7; // +7 for </span>
+        setTimeout(() => {
+          textarea.focus();
+          textarea.setSelectionRange(newCursorPos, newCursorPos);
+          setCursorPosition({ start: newCursorPos, end: newCursorPos });
+        }, 0);
+        
+        // Update preview with the new content
+        updatePreview(newContent);
+        return;
+      }
+    }
+    
+    // Original HTML tag formatting logic below
     // If no text is selected, place cursor between tags
     if (start === end) {
       let newContent;
@@ -174,6 +217,10 @@ function AdminAddPost() {
     updatePreview(formData.content);
   };
   
+  /**
+   * Handles image uploads from the file input
+   * Creates temporary URL previews and adds images to the state
+   */
   const handleImageUpload = async (e) => {
     const files = Array.from(e.target.files);
     
@@ -203,6 +250,10 @@ function AdminAddPost() {
     }
   };
   
+  /**
+   * Removes an image from the editor and content if inserted
+   * @param {string} id - The ID of the image to remove
+   */
   const removeImage = (id) => {
     const imageToRemove = images.find(img => img.id === id);
     
@@ -223,6 +274,11 @@ function AdminAddPost() {
     setImages(prevImages => prevImages.filter(image => image.id !== id));
   };
   
+  /**
+   * Changes the position/alignment of an image
+   * @param {string} id - The ID of the image
+   * @param {string} position - The position (left, center, right, full)
+   */
   const changeImagePosition = (id, position) => {
     setImages(prevImages => 
       prevImages.map(image => 
@@ -236,10 +292,17 @@ function AdminAddPost() {
     updatePreview(formData.content);
   };
   
+  /**
+   * Selects an image to be inserted into the content
+   * @param {number} index - The index of the image in the images array
+   */
   const selectImageToInsert = (index) => {
     setSelectedImageIndex(index);
   };
   
+  /**
+   * Inserts the selected image at the cursor position in the content
+   */
   const insertSelectedImage = () => {
     if (selectedImageIndex === null || !textareaRef.current) return;
     
@@ -283,6 +346,10 @@ function AdminAddPost() {
     }, 0);
   };
   
+  /**
+   * Updates the preview content with images and formatting
+   * @param {string} content - The HTML content to preview
+   */
   const updatePreview = (content) => {
     // Replace image placeholders with actual image elements
     let htmlContent = content;
@@ -303,9 +370,14 @@ function AdminAddPost() {
     // Then convert line breaks to HTML breaks
     htmlContent = htmlContent.replace(/\n/g, '<br>');
     
+    // We don't need to do extra processing for style attributes
+    // as they're already properly formatted with HTML tags
     setPreviewContent(htmlContent);
   };
 
+  /**
+   * Handles form submission to create a new blog post
+   */
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -348,6 +420,9 @@ function AdminAddPost() {
       
       // Handle line breaks properly for HTML display
       finalContent = finalContent.replace(/\n/g, '<br>');
+      
+      // No additional processing needed for style attributes as they're already
+      // properly formatted with span elements
       
       console.log('Final content with images:', finalContent);
       

@@ -10,6 +10,8 @@
   --accent-pink: #d85893;
   --accent-green: #87c2a5;
   --shadow-color: rgba(0, 0, 0, 0.3);
+  --button-orange: #f28c38;
+  --button-red: #dc3545;
 }
 
 .comment {
@@ -57,6 +59,42 @@
   word-wrap: break-word;
 }
 
+.comment-actions {
+  margin-top: 0.75rem;
+  display: flex;
+  gap: 0.75rem; /* Spacing between buttons */
+}
+
+.comment-edit-btn {
+  padding: 0.5rem 1rem;
+  background-color: var(--button-orange);
+  color: var(--text-primary);
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.2s ease;
+}
+
+.comment-edit-btn:hover {
+  background-color: #d97a30; /* Darker orange on hover */
+}
+
+.comment-delete-btn {
+  padding: 0.5rem 1rem;
+  background-color: var(--button-red);
+  color: var(--text-primary);
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.2s ease;
+}
+
+.comment-delete-btn:hover {
+  background-color: #c82333; /* Darker red on hover */
+}
+
 /* Animation for new comments */
 @keyframes fadeIn {
   from {
@@ -89,5 +127,15 @@
     flex-direction: column;
     align-items: flex-start;
     gap: 4px;
+  }
+  
+  .comment-actions {
+    gap: 0.5rem;
+  }
+  
+  .comment-edit-btn,
+  .comment-delete-btn {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.85rem;
   }
 }
