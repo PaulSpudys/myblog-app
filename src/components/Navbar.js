@@ -36,7 +36,7 @@ function Navbar() {
     <nav className={`navbar ${scrolled ? 'scrolled' : ''}`}>
       <div className="navbar-container">
         <Link to="/" className="navbar-logo">
-          Our blog
+          P & S Media blog
         </Link>
         
         {/* Mobile Menu Button */}
