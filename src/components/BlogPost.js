@@ -3,7 +3,7 @@ import { useAuth } from '../context/AuthContext';
 import { doc, deleteDoc, updateDoc, getDoc, increment, setDoc } from 'firebase/firestore';
 import { db } from '../firebase/firebase';
 import { Link } from 'react-router-dom';
-import { Helmet } from 'react-helmet-async';
+import { Helmet } from 'react-helmet'; // Changed to react-helmet
 import { TwitterShareButton, TwitterIcon } from 'react-share';
 import './BlogPost.css';
 
@@ -60,14 +60,10 @@ function BlogPost({ id, title, date, author, content, imageUrl, images, likes = 
   
   const normalizedAuthor = author.toLowerCase();
 
-  console.log('BlogPost props:', { id, title, author, normalizedAuthor, currentUserEmail: currentUser?.email, likes });
-
   const canModify = currentUser && (
     (normalizedAuthor === 'him' && currentUser.email === 'pauliusss_s@yahoo.com') || 
     (normalizedAuthor === 'her' && currentUser.email === 'simonasiniauskaite@gmail.com')
   );
-
-  console.log('canModify:', canModify, { normalizedAuthor, userEmail: currentUser?.email });
 
   useEffect(() => {
     const checkUserLike = async () => {
@@ -77,7 +73,6 @@ function BlogPost({ id, title, date, author, content, imageUrl, images, likes = 
         const likesRef = doc(db, 'postLikes', `${id}_${currentUser.uid}`);
         const likeDoc = await getDoc(likesRef);
         setHasLiked(likeDoc.exists());
-        console.log('Checked like for post:', id, 'exists:', likeDoc.exists());
       } catch (error) {
         console.error('Error checking likes:', error);
       }
@@ -92,19 +87,15 @@ function BlogPost({ id, title, date, author, content, imageUrl, images, likes = 
       return;
     }
     
-    console.log('Handling like for post:', id, 'by user:', currentUser.uid);
-    
     try {
       const postRef = doc(db, 'blogPosts', id);
       const likeId = `${id}_${currentUser.uid}`;
       const likesRef = doc(db, 'postLikes', likeId);
       
       const likeDoc = await getDoc(likesRef);
-      console.log('Like doc exists:', likeDoc.exists());
       
       if (!hasLiked) {
         if (!likeDoc.exists()) {
-          console.log('Adding like');
           await updateDoc(postRef, {
             likes: increment(1)
           });
@@ -120,7 +111,6 @@ function BlogPost({ id, title, date, author, content, imageUrl, images, likes = 
         }
       } else {
         if (likeDoc.exists()) {
-          console.log('Removing like');
           await updateDoc(postRef, {
             likes: increment(-1)
           });
@@ -138,11 +128,8 @@ function BlogPost({ id, title, date, author, content, imageUrl, images, likes = 
   };
 
   const handleEdit = () => {
-    console.log('BlogPost handleEdit triggered:', { id, title });
     if (onEdit) {
       onEdit(id);
-    } else {
-      console.error('onEdit prop not provided in BlogPost');
     }
   };
 
@@ -185,7 +172,7 @@ function BlogPost({ id, title, date, author, content, imageUrl, images, likes = 
     <div className="blog-post">
       <Helmet>
         <title>{title} - PS Media Blog</title>
-        <meta name="description" content={content.replace(/<[^>]*>/g, '').substring(0, 160)} />
+        <meta name="description" content={content ? content.replace(/<[^>]*>/g, '').substring(0, 160) : ''} />
         <meta name="keywords" content={hashtags.join(', ')} />
       </Helmet>
       {showMainImage && (
