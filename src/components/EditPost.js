@@ -4,13 +4,14 @@ import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { db, storage } from '../firebase/firebase';
 import TextEditorToolbar from './TextEditorToolbar';
 import { useNavigate } from 'react-router-dom';
-import './AdminAddPost.css'; // Reuse the same styles
+import './AdminAddPost.css';
 
 function EditPost({ postId, onCancel }) {
   const [formData, setFormData] = useState({
     title: '',
     content: '',
     author: '',
+    hashtags: ''
   });
   
   const [originalImages, setOriginalImages] = useState([]);
@@ -27,12 +28,9 @@ function EditPost({ postId, onCancel }) {
   });
   
   const navigate = useNavigate();
-  
-  // Reference for the textarea element
   const textareaRef = useRef(null);
   const fileInputRef = useRef(null);
 
-  // Fetch post data
   useEffect(() => {
     const fetchPost = async () => {
       try {
@@ -40,7 +38,6 @@ function EditPost({ postId, onCancel }) {
         if (postDoc.exists()) {
           const postData = postDoc.data();
           
-          // Process content to replace image tags with placeholders
           let processedContent = postData.content;
           const imgRegex = /<img src="([^"]+)" class="blog-image-([^"]+)" alt="Blog Image" \/>/g;
           let match;
@@ -66,7 +63,8 @@ function EditPost({ postId, onCancel }) {
           setFormData({
             title: postData.title,
             content: processedContent,
-            author: postData.author
+            author: postData.author,
+            hashtags: postData.hashtags ? postData.hashtags.join(', ') : ''
           });
           
           setOriginalImages(extractedImages);
@@ -88,7 +86,6 @@ function EditPost({ postId, onCancel }) {
     fetchPost();
   }, [postId]);
 
-  // Track cursor position and selection in the textarea
   const handleTextareaSelect = (e) => {
     setCursorPosition({
       start: e.target.selectionStart,
@@ -103,7 +100,6 @@ function EditPost({ postId, onCancel }) {
       [name]: value
     }));
     
-    // Update preview for content changes
     if (name === 'content') {
       updatePreview(value);
     }
@@ -123,50 +119,45 @@ function EditPost({ postId, onCancel }) {
     const { start, end } = cursorPosition;
     const currentContent = formData.content;
     
-    // If no text is selected, place cursor between tags
     if (start === end) {
       let newContent;
       let newCursorPos;
       
       switch (tag) {
         case 'ul':
-          // For lists, add a bullet point
           newContent = 
             currentContent.substring(0, start) + 
             '\n• ' + 
             currentContent.substring(end);
-          newCursorPos = start + 3; // After the bullet and space
+          newCursorPos = start + 3;
           break;
         
         case 'blockquote':
-          // For blockquotes, add the tags and a line break
           newContent = 
             currentContent.substring(0, start) + 
             '<blockquote>\n' + 
             '\n</blockquote>' + 
             currentContent.substring(end);
-          newCursorPos = start + 13; // After the opening tag and newline
+          newCursorPos = start + 13;
           break;
         
         case 'h2':
         case 'h3':
-          // For headings, add the tags and place cursor between them
           newContent = 
             currentContent.substring(0, start) + 
             `<${tag}>` + 
             `</${tag}>` + 
             currentContent.substring(end);
-          newCursorPos = start + tag.length + 2; // After the opening tag
+          newCursorPos = start + tag.length + 2;
           break;
         
         default:
-          // For other tags, just add them and place cursor in between
           newContent = 
             currentContent.substring(0, start) + 
             `<${tag}>` + 
             `</${tag}>` + 
             currentContent.substring(end);
-          newCursorPos = start + tag.length + 2; // Position after the opening tag
+          newCursorPos = start + tag.length + 2;
       }
       
       setFormData(prev => ({
@@ -174,7 +165,6 @@ function EditPost({ postId, onCancel }) {
         content: newContent
       }));
       
-      // Set cursor position after rendering
       setTimeout(() => {
         textarea.focus();
         textarea.setSelectionRange(newCursorPos, newCursorPos);
@@ -182,12 +172,10 @@ function EditPost({ postId, onCancel }) {
       }, 0);
       
     } else {
-      // If text is selected, wrap it with the tags
       let newContent;
       
       switch (tag) {
         case 'ul':
-          // For lists, handle each line
           const selectedText = currentContent.substring(start, end);
           const lines = selectedText.split('\n');
           const bulletedLines = lines.map(line => 
@@ -201,7 +189,6 @@ function EditPost({ postId, onCancel }) {
           break;
         
         case 'blockquote':
-          // For blockquotes, wrap the selected text
           newContent = 
             currentContent.substring(0, start) + 
             `<blockquote>${currentContent.substring(start, end)}</blockquote>` + 
@@ -209,7 +196,6 @@ function EditPost({ postId, onCancel }) {
           break;
         
         default:
-          // For other tags, just wrap the selected text
           newContent = 
             currentContent.substring(0, start) + 
             `<${tag}>${currentContent.substring(start, end)}</${tag}>` + 
@@ -221,8 +207,7 @@ function EditPost({ postId, onCancel }) {
         content: newContent
       }));
       
-      // Set cursor position after the formatted text
-      const newCursorPos = end + (tag.length * 2) + 5; // Adjusted for the opening and closing tags
+      const newCursorPos = end + (tag.length * 2) + 5;
       setTimeout(() => {
         textarea.focus();
         textarea.setSelectionRange(newCursorPos, newCursorPos);
@@ -230,7 +215,6 @@ function EditPost({ postId, onCancel }) {
       }, 0);
     }
     
-    // Update preview with the new content
     updatePreview(formData.content);
   };
   
@@ -242,7 +226,6 @@ function EditPost({ postId, onCancel }) {
     const newImages = [];
     
     for (const file of files) {
-      // Create a temporary URL for preview
       const previewUrl = URL.createObjectURL(file);
       
       newImages.push({
@@ -250,14 +233,13 @@ function EditPost({ postId, onCancel }) {
         previewUrl,
         id: Date.now() + Math.random().toString(36).substr(2, 9),
         uploaded: false,
-        position: 'center', // Default position
-        insertPosition: null // Will be set when the image is inserted into the content
+        position: 'center',
+        insertPosition: null
       });
     }
     
     setImages(prevImages => [...prevImages, ...newImages]);
     
-    // Clear the file input
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
     }
@@ -267,7 +249,6 @@ function EditPost({ postId, onCancel }) {
     const imageToRemove = images.find(img => img.id === id);
     
     if (imageToRemove && imageToRemove.insertPosition !== null) {
-      // Remove the image placeholder from the content
       const placeholderText = `[IMAGE:${id}]`;
       const currentContent = formData.content;
       const newContent = currentContent.replace(placeholderText, '');
@@ -292,7 +273,6 @@ function EditPost({ postId, onCancel }) {
       )
     );
     
-    // Update preview
     updatePreview(formData.content);
   };
   
@@ -313,7 +293,6 @@ function EditPost({ postId, onCancel }) {
       placeholderText + 
       currentContent.substring(start);
     
-    // Update the image's insert position
     setImages(prevImages => 
       prevImages.map((image, index) => 
         index === selectedImageIndex
@@ -322,19 +301,15 @@ function EditPost({ postId, onCancel }) {
       )
     );
     
-    // Update the content with the placeholder
     setFormData(prev => ({
       ...prev,
       content: newContent
     }));
     
-    // Reset selected image
     setSelectedImageIndex(null);
     
-    // Update preview
     updatePreview(newContent);
     
-    // Focus back on textarea and position cursor after the inserted placeholder
     const newCursorPos = start + placeholderText.length;
     setTimeout(() => {
       textareaRef.current.focus();
@@ -344,10 +319,8 @@ function EditPost({ postId, onCancel }) {
   };
   
   const updatePreview = (content, imagesList = images) => {
-    // Replace image placeholders with actual image elements
     let htmlContent = content;
     
-    // First replace image placeholders with actual HTML
     imagesList.forEach(image => {
       const placeholder = `[IMAGE:${image.id}]`;
       const imgClass = `preview-image preview-${image.position}`;
@@ -360,7 +333,6 @@ function EditPost({ postId, onCancel }) {
       htmlContent = htmlContent.replace(placeholder, imgHtml);
     });
     
-    // Then convert line breaks to HTML breaks
     htmlContent = htmlContent.replace(/\n/g, '<br>');
     
     setPreviewContent(htmlContent);
@@ -373,11 +345,9 @@ function EditPost({ postId, onCancel }) {
     setSubmitStatus('');
 
     try {
-      // Upload new images to Firebase Storage
       const uploadedImages = [];
       
       for (let image of images) {
-        // Skip original images that already have URLs
         if (image.original) {
           uploadedImages.push({
             url: image.url,
@@ -398,7 +368,6 @@ function EditPost({ postId, onCancel }) {
         });
       }
       
-      // Replace image placeholders in the content with actual HTML image tags
       let finalContent = formData.content;
       
       uploadedImages.forEach(image => {
@@ -407,19 +376,24 @@ function EditPost({ postId, onCancel }) {
         finalContent = finalContent.replace(placeholder, imgHtml);
       });
 
-      // Update blog post in Firestore
+      // Process hashtags
+      const hashtagsArray = formData.hashtags
+        .split(',')
+        .map(tag => tag.trim().toLowerCase().replace(/[^a-z0-9-]/g, ''))
+        .filter(tag => tag !== '');
+
       await updateDoc(doc(db, "blogPosts", postId), {
         title: formData.title,
         content: finalContent,
         author: formData.author,
         images: uploadedImages,
+        hashtags: hashtagsArray,
         lastUpdated: new Date()
       });
 
       setSubmitMessage('Blog post updated successfully!');
       setSubmitStatus('success');
       
-      // Redirect back to the blog page after a short delay
       setTimeout(() => {
         navigate(`/${formData.author === 'him' ? 'his' : 'her'}-blog`);
       }, 1500);
@@ -433,7 +407,6 @@ function EditPost({ postId, onCancel }) {
     }
   };
 
-  // Update preview whenever content or images change
   useEffect(() => {
     updatePreview(formData.content);
   }, [formData.content, images]);
@@ -476,6 +449,21 @@ function EditPost({ postId, onCancel }) {
               >
                 Her Blog
               </button>
+            </div>
+          </div>
+          
+          <div className="form-group">
+            <label htmlFor="hashtags">Hashtags (comma-separated, e.g., travel-tips, adventure)</label>
+            <input
+              type="text"
+              id="hashtags"
+              name="hashtags"
+              value={formData.hashtags}
+              onChange={handleChange}
+              placeholder="travel-tips, adventure, europe"
+            />
+            <div className="content-help">
+              Update hashtags to improve searchability (3-5 recommended).
             </div>
           </div>
           

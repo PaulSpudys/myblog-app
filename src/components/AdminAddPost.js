@@ -9,8 +9,9 @@ function AdminAddPost() {
   const [formData, setFormData] = useState({
     title: '',
     content: '',
-    excerpt: '', // Added excerpt field
+    excerpt: '',
     author: 'him',
+    hashtags: ''
   });
   
   const [images, setImages] = useState([]);
@@ -24,11 +25,9 @@ function AdminAddPost() {
     end: 0
   });
   
-  // Reference for the textarea element
   const textareaRef = useRef(null);
   const fileInputRef = useRef(null);
 
-  // Track cursor position and selection in the textarea
   const handleTextareaSelect = (e) => {
     setCursorPosition({
       start: e.target.selectionStart,
@@ -43,7 +42,6 @@ function AdminAddPost() {
       [name]: value
     }));
     
-    // Update preview for content changes
     if (name === 'content') {
       updatePreview(value);
     }
@@ -56,11 +54,6 @@ function AdminAddPost() {
     }));
   };
   
-  /**
-   * Handles text formatting operations including standard HTML tags and CSS styling
-   * @param {string} tag - The tag to apply (HTML tag or CSS property name)
-   * @param {string} value - The value for CSS properties (used for font, size, color)
-   */
   const handleFormatText = (tag, value) => {
     if (!textareaRef.current) return;
     
@@ -68,16 +61,13 @@ function AdminAddPost() {
     const { start, end } = cursorPosition;
     const currentContent = formData.content;
     
-    // Handle font family, font size, and color - these need the value parameter
     if (tag === 'fontFamily' || tag === 'fontSize' || tag === 'color') {
       if (start === end) {
-        // If no text is selected, show a message
         alert("Please select some text before applying " + 
           (tag === 'fontFamily' ? 'font family' : 
            tag === 'fontSize' ? 'font size' : 'color'));
         return;
       } else {
-        // If text is selected, wrap it with the styled span
         const styleAttr = tag === 'fontFamily' ? 'font-family' : tag === 'fontSize' ? 'font-size' : 'color';
         const newContent = 
           currentContent.substring(0, start) + 
@@ -91,65 +81,57 @@ function AdminAddPost() {
           content: newContent
         }));
         
-        // Position cursor after the formatted text
-        const newCursorPos = end + `<span style="${styleAttr}: ${value}">`.length + 7; // +7 for </span>
+        const newCursorPos = end + `<span style="${styleAttr}: ${value}">`.length + 7;
         setTimeout(() => {
           textarea.focus();
           textarea.setSelectionRange(newCursorPos, newCursorPos);
           setCursorPosition({ start: newCursorPos, end: newCursorPos });
         }, 0);
         
-        // Update preview with the new content
         updatePreview(newContent);
         return;
       }
     }
     
-    // Original HTML tag formatting logic below
-    // If no text is selected, place cursor between tags
     if (start === end) {
       let newContent;
       let newCursorPos;
       
       switch (tag) {
         case 'ul':
-          // For lists, add a bullet point
           newContent = 
             currentContent.substring(0, start) + 
             '\n• ' + 
             currentContent.substring(end);
-          newCursorPos = start + 3; // After the bullet and space
+          newCursorPos = start + 3;
           break;
         
         case 'blockquote':
-          // For blockquotes, add the tags and a line break
           newContent = 
             currentContent.substring(0, start) + 
             '<blockquote>\n' + 
             '\n</blockquote>' + 
             currentContent.substring(end);
-          newCursorPos = start + 13; // After the opening tag and newline
+          newCursorPos = start + 13;
           break;
         
         case 'h2':
         case 'h3':
-          // For headings, add the tags and place cursor between them
           newContent = 
             currentContent.substring(0, start) + 
             `<${tag}>` + 
             `</${tag}>` + 
             currentContent.substring(end);
-          newCursorPos = start + tag.length + 2; // After the opening tag
+          newCursorPos = start + tag.length + 2;
           break;
         
         default:
-          // For other tags, just add them and place cursor in between
           newContent = 
             currentContent.substring(0, start) + 
             `<${tag}>` + 
             `</${tag}>` + 
             currentContent.substring(end);
-          newCursorPos = start + tag.length + 2; // Position after the opening tag
+          newCursorPos = start + tag.length + 2;
       }
       
       setFormData(prev => ({
@@ -157,7 +139,6 @@ function AdminAddPost() {
         content: newContent
       }));
       
-      // Set cursor position after rendering
       setTimeout(() => {
         textarea.focus();
         textarea.setSelectionRange(newCursorPos, newCursorPos);
@@ -165,12 +146,10 @@ function AdminAddPost() {
       }, 0);
       
     } else {
-      // If text is selected, wrap it with the tags
       let newContent;
       
       switch (tag) {
         case 'ul':
-          // For lists, handle each line
           const selectedText = currentContent.substring(start, end);
           const lines = selectedText.split('\n');
           const bulletedLines = lines.map(line => 
@@ -184,7 +163,6 @@ function AdminAddPost() {
           break;
         
         case 'blockquote':
-          // For blockquotes, wrap the selected text
           newContent = 
             currentContent.substring(0, start) + 
             `<blockquote>${currentContent.substring(start, end)}</blockquote>` + 
@@ -192,7 +170,6 @@ function AdminAddPost() {
           break;
         
         default:
-          // For other tags, just wrap the selected text
           newContent = 
             currentContent.substring(0, start) + 
             `<${tag}>${currentContent.substring(start, end)}</${tag}>` + 
@@ -204,8 +181,7 @@ function AdminAddPost() {
         content: newContent
       }));
       
-      // Set cursor position after the formatted text
-      const newCursorPos = end + (tag.length * 2) + 5; // Adjusted for the opening and closing tags
+      const newCursorPos = end + (tag.length * 2) + 5;
       setTimeout(() => {
         textarea.focus();
         textarea.setSelectionRange(newCursorPos, newCursorPos);
@@ -213,14 +189,9 @@ function AdminAddPost() {
       }, 0);
     }
     
-    // Update preview with the new content
     updatePreview(formData.content);
   };
   
-  /**
-   * Handles image uploads from the file input
-   * Creates temporary URL previews and adds images to the state
-   */
   const handleImageUpload = async (e) => {
     const files = Array.from(e.target.files);
     
@@ -229,7 +200,6 @@ function AdminAddPost() {
     const newImages = [];
     
     for (const file of files) {
-      // Create a temporary URL for preview
       const previewUrl = URL.createObjectURL(file);
       
       newImages.push({
@@ -237,28 +207,22 @@ function AdminAddPost() {
         previewUrl,
         id: Date.now() + Math.random().toString(36).substr(2, 9),
         uploaded: false,
-        position: 'center', // Default position
-        insertPosition: null // Will be set when the image is inserted into the content
+        position: 'center',
+        insertPosition: null
       });
     }
     
     setImages(prevImages => [...prevImages, ...newImages]);
     
-    // Clear the file input
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
     }
   };
   
-  /**
-   * Removes an image from the editor and content if inserted
-   * @param {string} id - The ID of the image to remove
-   */
   const removeImage = (id) => {
     const imageToRemove = images.find(img => img.id === id);
     
     if (imageToRemove && imageToRemove.insertPosition !== null) {
-      // Remove the image placeholder from the content
       const placeholderText = `[IMAGE:${id}]`;
       const currentContent = formData.content;
       const newContent = currentContent.replace(placeholderText, '');
@@ -274,11 +238,6 @@ function AdminAddPost() {
     setImages(prevImages => prevImages.filter(image => image.id !== id));
   };
   
-  /**
-   * Changes the position/alignment of an image
-   * @param {string} id - The ID of the image
-   * @param {string} position - The position (left, center, right, full)
-   */
   const changeImagePosition = (id, position) => {
     setImages(prevImages => 
       prevImages.map(image => 
@@ -288,21 +247,13 @@ function AdminAddPost() {
       )
     );
     
-    // Update preview
     updatePreview(formData.content);
   };
   
-  /**
-   * Selects an image to be inserted into the content
-   * @param {number} index - The index of the image in the images array
-   */
   const selectImageToInsert = (index) => {
     setSelectedImageIndex(index);
   };
   
-  /**
-   * Inserts the selected image at the cursor position in the content
-   */
   const insertSelectedImage = () => {
     if (selectedImageIndex === null || !textareaRef.current) return;
     
@@ -316,7 +267,6 @@ function AdminAddPost() {
       placeholderText + 
       currentContent.substring(start);
     
-    // Update the image's insert position
     setImages(prevImages => 
       prevImages.map((image, index) => 
         index === selectedImageIndex
@@ -325,19 +275,15 @@ function AdminAddPost() {
       )
     );
     
-    // Update the content with the placeholder
     setFormData(prev => ({
       ...prev,
       content: newContent
     }));
     
-    // Reset selected image
     setSelectedImageIndex(null);
     
-    // Update preview
     updatePreview(newContent);
     
-    // Focus back on textarea and position cursor after the inserted placeholder
     const newCursorPos = start + placeholderText.length;
     setTimeout(() => {
       textareaRef.current.focus();
@@ -346,15 +292,9 @@ function AdminAddPost() {
     }, 0);
   };
   
-  /**
-   * Updates the preview content with images and formatting
-   * @param {string} content - The HTML content to preview
-   */
   const updatePreview = (content) => {
-    // Replace image placeholders with actual image elements
     let htmlContent = content;
     
-    // First replace image placeholders with actual HTML
     images.forEach(image => {
       const placeholder = `[IMAGE:${image.id}]`;
       const imgClass = `preview-image preview-${image.position}`;
@@ -367,17 +307,11 @@ function AdminAddPost() {
       htmlContent = htmlContent.replace(placeholder, imgHtml);
     });
     
-    // Then convert line breaks to HTML breaks
     htmlContent = htmlContent.replace(/\n/g, '<br>');
     
-    // We don't need to do extra processing for style attributes
-    // as they're already properly formatted with HTML tags
     setPreviewContent(htmlContent);
   };
 
-  /**
-   * Handles form submission to create a new blog post
-   */
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -385,11 +319,9 @@ function AdminAddPost() {
     setSubmitStatus('');
 
     try {
-      // Upload all images to Firebase Storage with cleaned filenames
       const uploadedImages = [];
       
       for (let image of images) {
-        // Clean filename to avoid URL encoding issues
         const cleanFileName = image.file.name.replace(/[^a-zA-Z0-9.]/g, '_');
         const storageRef = ref(storage, `blog-images/${Date.now()}_${cleanFileName}`);
         await uploadBytes(storageRef, image.file);
@@ -402,56 +334,49 @@ function AdminAddPost() {
         });
       }
       
-      console.log('Uploading images:', uploadedImages);
-      
-      // Replace image placeholders in the content with actual HTML image tags
       let finalContent = formData.content;
       
-      // Process each image placeholder one by one to avoid conflicts
       for (const image of uploadedImages) {
         const placeholder = `[IMAGE:${image.id}]`;
         const imgHtml = `<img src="${image.url}" class="blog-image-${image.position}" alt="Blog Image" />`;
         
-        // Replace all occurrences of this placeholder
         while (finalContent.includes(placeholder)) {
           finalContent = finalContent.replace(placeholder, imgHtml);
         }
       }
       
-      // Handle line breaks properly for HTML display
       finalContent = finalContent.replace(/\n/g, '<br>');
       
-      // No additional processing needed for style attributes as they're already
-      // properly formatted with span elements
-      
-      console.log('Final content with images:', finalContent);
-      
-      // Get the first image URL to use as the main post image
       const mainImageUrl = uploadedImages.length > 0 ? uploadedImages[0].url : null;
 
-      // Generate an excerpt if not provided
       const generatedExcerpt = finalContent.replace(/<[^>]*>/g, '').substring(0, 150) + '...';
 
-      // Add blog post to Firestore
+      // Process hashtags
+      const hashtagsArray = formData.hashtags
+        .split(',')
+        .map(tag => tag.trim().toLowerCase().replace(/[^a-z0-9-]/g, ''))
+        .filter(tag => tag !== '');
+
       await addDoc(collection(db, "blogPosts"), {
         title: formData.title,
         content: finalContent,
-        excerpt: formData.excerpt || generatedExcerpt, // Use provided excerpt or generate one
+        excerpt: formData.excerpt || generatedExcerpt,
         author: formData.author,
         date: Timestamp.now(),
-        imageUrl: mainImageUrl, // Set the first image as the main image
-        images: uploadedImages // Store all images
+        imageUrl: mainImageUrl,
+        images: uploadedImages,
+        hashtags: hashtagsArray
       });
 
       setSubmitMessage('Blog post published successfully!');
       setSubmitStatus('success');
       
-      // Reset form
       setFormData({
         title: '',
         content: '',
         excerpt: '',
-        author: formData.author
+        author: formData.author,
+        hashtags: ''
       });
       setImages([]);
       setPreviewContent('');
@@ -465,7 +390,6 @@ function AdminAddPost() {
     }
   };
 
-  // Update preview whenever content or images change
   useEffect(() => {
     updatePreview(formData.content);
   }, [formData.content, images]);
@@ -519,6 +443,21 @@ function AdminAddPost() {
             ></textarea>
             <div className="content-help">
               This short description will appear in blog listing pages. If left empty, it will be automatically generated.
+            </div>
+          </div>
+          
+          <div className="form-group">
+            <label htmlFor="hashtags">Hashtags (comma-separated, e.g., travel-tips, adventure)</label>
+            <input
+              type="text"
+              id="hashtags"
+              name="hashtags"
+              value={formData.hashtags}
+              onChange={handleChange}
+              placeholder="travel-tips, adventure, europe"
+            />
+            <div className="content-help">
+              Add hashtags to improve searchability (3-5 recommended).
             </div>
           </div>
           

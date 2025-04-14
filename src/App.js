@@ -12,6 +12,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import { AuthProvider } from './context/AuthContext';
 import './App.css';
 import BlogPostPage from './pages/BlogPostPage';
+import TagsPage from './pages/TagsPage';
 
 // Import new auth components
 import Register from './components/Register';
@@ -31,6 +32,7 @@ function App() {
               <Route path="/her-blog" element={<HerBlog />} />
               <Route path="/contact" element={<ContactPage />} />
               <Route path="/post/:postId" element={<BlogPostPage />} />
+              <Route path="/tags/:tag" element={<TagsPage />} />
               
               {/* Auth Routes */}
               <Route path="/login" element={<LoginPage />} />
