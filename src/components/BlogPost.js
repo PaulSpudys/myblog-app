@@ -204,15 +204,7 @@ function BlogPost({ id, title, date, author, content, imageUrl, images, likes = 
           <span className="blog-post-author">By {displayAuthor}</span>
           <span className="blog-post-date">{date}</span>
         </div>
-        {(hashtags || []).length > 0 && (
-          <div className="blog-post-hashtags">
-            {hashtags.map((tag, index) => (
-              <Link key={index} to={`/tags/${tag}`} className="hashtag">
-                #{tag}
-              </Link>
-            ))}
-          </div>
-        )}
+        {/* Removed visible hashtag rendering */}
         <div 
           className="blog-post-body"
           dangerouslySetInnerHTML={{ __html: enhancedContent }} 
