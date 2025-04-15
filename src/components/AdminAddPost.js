@@ -533,7 +533,7 @@ function AdminAddPost() {
         if (image.pairedWith) {
           const pairedImage = uploadedImages.find(img => img.id === image.pairedWith);
           if (pairedImage) {
-            const pairedPlaceholderHazard = `[PAIRED:${image.id}:${pairedImage.id}]`;
+            const pairedPlaceholder = `[PAIRED:${image.id}:${pairedImage.id}]`;
             const reversePairedPlaceholder = `[PAIRED:${pairedImage.id}:${image.id}]`;
             const pairHtml = `
               <div class="blog-image-pair">
