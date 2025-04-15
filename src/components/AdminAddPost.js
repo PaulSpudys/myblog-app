@@ -47,6 +47,15 @@ function AdminAddPost() {
     }
   };
 
+  // New function to preprocess hashtags input
+  const handleHashtagsChange = (e) => {
+    const value = e.target.value;
+    setFormData(prevState => ({
+      ...prevState,
+      hashtags: value
+    }));
+  };
+
   const handleAuthorToggle = () => {
     setFormData(prevState => ({
       ...prevState,
@@ -351,11 +360,17 @@ function AdminAddPost() {
 
       const generatedExcerpt = finalContent.replace(/<[^>]*>/g, '').substring(0, 150) + '...';
 
-      // Process hashtags
+      // Process hashtags with debug logging
+      console.log('Raw hashtags input:', formData.hashtags);
       const hashtagsArray = formData.hashtags
         .split(',')
-        .map(tag => tag.trim().toLowerCase().replace(/[^a-z0-9-]/g, ''))
-        .filter(tag => tag !== '');
+        .map(tag => {
+          const cleanedTag = tag.trim().toLowerCase().replace(/[^a-z0-9\s]/g, '');
+          console.log('Processing tag:', tag, '->', cleanedTag);
+          return cleanedTag;
+        })
+        .filter(tag => tag.length > 0);
+      console.log('Final hashtags array:', hashtagsArray);
 
       await addDoc(collection(db, "blogPosts"), {
         title: formData.title,
@@ -447,14 +462,14 @@ function AdminAddPost() {
           </div>
           
           <div className="form-group">
-            <label htmlFor="hashtags">Hashtags (comma-separated, e.g., travel-tips, adventure)</label>
+            <label htmlFor="hashtags">Hashtags (comma-separated, e.g., travel, fishing, biking)</label>
             <input
               type="text"
               id="hashtags"
               name="hashtags"
               value={formData.hashtags}
-              onChange={handleChange}
-              placeholder="travel-tips, adventure, europe"
+              onChange={handleHashtagsChange}
+              placeholder="travel, fishing, biking"
             />
             <div className="content-help">
               Add hashtags to improve searchability (3-5 recommended).
