@@ -118,11 +118,12 @@ function BlogPostPage() {
           : post.date.toDate 
             ? post.date.toDate().toLocaleDateString()
             : new Date(post.date).toLocaleDateString()}
-        author={post.author === 'him' ? 'Him' : 'Her'}
+        author={post.author}
         content={post.content}
         imageUrl={post.imageUrl}
         images={post.images || []}
         likes={post.likes || 0}
+        hashtags={post.hashtags || []} // Added hashtags prop
         onEdit={handleEditPost}
       />
       <CommentSection postId={post.id} />

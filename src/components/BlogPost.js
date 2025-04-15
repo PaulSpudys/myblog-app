@@ -3,7 +3,7 @@ import { useAuth } from '../context/AuthContext';
 import { doc, deleteDoc, updateDoc, getDoc, increment, setDoc } from 'firebase/firestore';
 import { db } from '../firebase/firebase';
 import { Link } from 'react-router-dom';
-import { Helmet } from 'react-helmet'; // Changed to react-helmet
+import { Helmet } from 'react-helmet';
 import { TwitterShareButton, TwitterIcon } from 'react-share';
 import './BlogPost.css';
 
@@ -58,6 +58,9 @@ function BlogPost({ id, title, date, author, content, imageUrl, images, likes = 
   const [likeCount, setLikeCount] = useState(likes);
   const [hasLiked, setHasLiked] = useState(false);
   
+  // Debug log to verify props
+  console.log('BlogPost props:', { id, title, date, author, content, imageUrl, images, likes, hashtags });
+
   const normalizedAuthor = author.toLowerCase();
 
   const canModify = currentUser && (
@@ -173,7 +176,7 @@ function BlogPost({ id, title, date, author, content, imageUrl, images, likes = 
       <Helmet>
         <title>{title} - PS Media Blog</title>
         <meta name="description" content={content ? content.replace(/<[^>]*>/g, '').substring(0, 160) : ''} />
-        <meta name="keywords" content={hashtags.join(', ')} />
+        <meta name="keywords" content={(hashtags || []).join(', ')} />
       </Helmet>
       {showMainImage && (
         <img 
@@ -201,7 +204,7 @@ function BlogPost({ id, title, date, author, content, imageUrl, images, likes = 
           <span className="blog-post-author">By {displayAuthor}</span>
           <span className="blog-post-date">{date}</span>
         </div>
-        {hashtags.length > 0 && (
+        {(hashtags || []).length > 0 && (
           <div className="blog-post-hashtags">
             {hashtags.map((tag, index) => (
               <Link key={index} to={`/tags/${tag}`} className="hashtag">
