@@ -39,13 +39,14 @@ function EditPost({ postId, onCancel }) {
           const postData = postDoc.data();
           
           let processedContent = postData.content;
-          const imgRegex = /<img src="([^"]+)" class="blog-image-([^"]+)" alt="Blog Image" \/>/g;
-          let match;
           const extractedImages = [];
           
+          let imgRegex = /<img src="([^"]+)" class="blog-image-([^"\s]+)\s*size-([^"]+)" alt="Blog Image" \/>/g;
+          let match;
           while ((match = imgRegex.exec(postData.content)) !== null) {
             const imageUrl = match[1];
             const position = match[2];
+            const size = match[3];
             const id = Date.now() + Math.random().toString(36).substr(2, 9) + extractedImages.length;
             const placeholder = `[IMAGE:${id}]`;
             
@@ -53,9 +54,41 @@ function EditPost({ postId, onCancel }) {
               id,
               url: imageUrl,
               position,
+              size,
               previewUrl: imageUrl,
-              original: true
+              original: true,
+              pairedWith: null
             });
+            
+            processedContent = processedContent.replace(match[0], placeholder);
+          }
+          
+          imgRegex = /<div class="blog-image-pair">[\s]*<img src="([^"]+)" class="size-([^"]+)" alt="Blog Image" \/>[\s]*<img src="([^"]+)" class="size-([^"]+)" alt="Blog Image" \/>[\s]*<\/div>/g;
+          while ((match = imgRegex.exec(postData.content)) !== null) {
+            const id1 = Date.now() + Math.random().toString(36).substr(2, 9) + extractedImages.length;
+            const id2 = Date.now() + Math.random().toString(36).substr(2, 9) + extractedImages.length + 1;
+            const placeholder = `[PAIRED:${id1}:${id2}]`;
+            
+            extractedImages.push(
+              {
+                id: id1,
+                url: match[1],
+                position: 'center',
+                size: match[2],
+                previewUrl: match[1],
+                original: true,
+                pairedWith: id2
+              },
+              {
+                id: id2,
+                url: match[3],
+                position: 'center',
+                size: match[4],
+                previewUrl: match[3],
+                original: true,
+                pairedWith: id1
+              }
+            );
             
             processedContent = processedContent.replace(match[0], placeholder);
           }
@@ -234,7 +267,9 @@ function EditPost({ postId, onCancel }) {
         id: Date.now() + Math.random().toString(36).substr(2, 9),
         uploaded: false,
         position: 'center',
-        insertPosition: null
+        insertPosition: null,
+        size: 'medium',
+        pairedWith: null
       });
     }
     
@@ -249,7 +284,9 @@ function EditPost({ postId, onCancel }) {
     const imageToRemove = images.find(img => img.id === id);
     
     if (imageToRemove && imageToRemove.insertPosition !== null) {
-      const placeholderText = `[IMAGE:${id}]`;
+      const placeholderText = imageToRemove.pairedWith
+        ? `[PAIRED:${imageToRemove.id}:${imageToRemove.pairedWith}]`
+        : `[IMAGE:${id}]`;
       const currentContent = formData.content;
       const newContent = currentContent.replace(placeholderText, '');
       
@@ -275,6 +312,29 @@ function EditPost({ postId, onCancel }) {
     
     updatePreview(formData.content);
   };
+
+  const changeImageSize = (id, size) => {
+    setImages(prevImages =>
+      prevImages.map(image =>
+        image.id === id ? { ...image, size } : image
+      )
+    );
+    updatePreview(formData.content);
+  };
+
+  const handleImagePairing = (id, pairedId) => {
+    setImages(prevImages => {
+      const updatedImages = prevImages.map(img => ({
+        ...img,
+        pairedWith: img.pairedWith === id || img.pairedWith === pairedId ? null : img.pairedWith
+      }));
+      return updatedImages.map(img =>
+        img.id === id ? { ...img, pairedWith: pairedId || null } :
+        img.id === pairedId ? { ...img, pairedWith: id } : img
+      );
+    });
+    updatePreview(formData.content);
+  };
   
   const selectImageToInsert = (index) => {
     setSelectedImageIndex(index);
@@ -284,7 +344,12 @@ function EditPost({ postId, onCancel }) {
     if (selectedImageIndex === null || !textareaRef.current) return;
     
     const selectedImage = images[selectedImageIndex];
-    const placeholderText = `[IMAGE:${selectedImage.id}]`;
+    let placeholderText = `[IMAGE:${selectedImage.id}]`;
+    
+    if (selectedImage.pairedWith) {
+      placeholderText = `[PAIRED:${selectedImage.id}:${selectedImage.pairedWith}]`;
+    }
+    
     const currentContent = formData.content;
     const { start } = cursorPosition;
     
@@ -296,6 +361,8 @@ function EditPost({ postId, onCancel }) {
     setImages(prevImages => 
       prevImages.map((image, index) => 
         index === selectedImageIndex
+          ? { ...image, insertPosition: start }
+          : image.id === selectedImage.pairedWith
           ? { ...image, insertPosition: start }
           : image
       )
@@ -317,20 +384,160 @@ function EditPost({ postId, onCancel }) {
       setCursorPosition({ start: newCursorPos, end: newCursorPos });
     }, 0);
   };
+
+  const moveImageUp = (id) => {
+    const image = images.find(img => img.id === id);
+    if (!image.insertPosition) return;
+    
+    const content = formData.content;
+    const placeholder = image.pairedWith 
+      ? `[PAIRED:${image.id}:${image.pairedWith}]` 
+      : `[IMAGE:${image.id}]`;
+    
+    const placeholders = [];
+    images.forEach(img => {
+      if (img.insertPosition !== null) {
+        if (img.pairedWith) {
+          placeholders.push({
+            text: `[PAIRED:${img.id}:${img.pairedWith}]`,
+            position: img.insertPosition
+          });
+        } else {
+          placeholders.push({
+            text: `[IMAGE:${img.id}]`,
+            position: img.insertPosition
+          });
+        }
+      }
+    });
+    
+    placeholders.sort((a, b) => a.position - b.position);
+    const currentIndex = placeholders.findIndex(p => p.text === placeholder);
+    if (currentIndex <= 0) return;
+    
+    const prevPlaceholder = placeholders[currentIndex - 1];
+    
+    let newContent = content;
+    const tempPlaceholder = '@@@TEMP@@@';
+    newContent = newContent.replace(placeholder, tempPlaceholder);
+    newContent = newContent.replace(prevPlaceholder.text, placeholder);
+    newContent = newContent.replace(tempPlaceholder, prevPlaceholder.text);
+    
+    setFormData(prev => ({
+      ...prev,
+      content: newContent
+    }));
+    
+    setImages(prevImages =>
+      prevImages.map(img => {
+        if (img.id === id) {
+          return { ...img, insertPosition: prevPlaceholder.position };
+        }
+        if (img.id === prevPlaceholder.text.match(/IMAGE:(\w+)/)?.[1] ||
+            img.id === prevPlaceholder.text.match(/PAIRED:(\w+):/)?.[1]) {
+          return { ...img, insertPosition: image.insertPosition };
+        }
+        return img;
+      })
+    );
+    
+    updatePreview(newContent);
+  };
+
+  const moveImageDown = (id) => {
+    const image = images.find(img => img.id === id);
+    if (!image.insertPosition) return;
+    
+    const content = formData.content;
+    const placeholder = image.pairedWith 
+      ? `[PAIRED:${image.id}:${image.pairedWith}]` 
+      : `[IMAGE:${image.id}]`;
+    
+    const placeholders = [];
+    images.forEach(img => {
+      if (img.insertPosition !== null) {
+        if (img.pairedWith) {
+          placeholders.push({
+            text: `[PAIRED:${img.id}:${img.pairedWith}]`,
+            position: img.insertPosition
+          });
+        } else {
+          placeholders.push({
+            text: `[IMAGE:${img.id}]`,
+            position: img.insertPosition
+          });
+        }
+      }
+    });
+    
+    placeholders.sort((a, b) => a.position - b.position);
+    const currentIndex = placeholders.findIndex(p => p.text === placeholder);
+    if (currentIndex >= placeholders.length - 1) return;
+    
+    const nextPlaceholder = placeholders[currentIndex + 1];
+    
+    let newContent = content;
+    const tempPlaceholder = '@@@TEMP@@@';
+    newContent = newContent.replace(placeholder, tempPlaceholder);
+    newContent = newContent.replace(nextPlaceholder.text, placeholder);
+    newContent = newContent.replace(tempPlaceholder, nextPlaceholder.text);
+    
+    setFormData(prev => ({
+      ...prev,
+      content: newContent
+    }));
+    
+    setImages(prevImages =>
+      prevImages.map(img => {
+        if (img.id === id) {
+          return { ...img, insertPosition: nextPlaceholder.position };
+        }
+        if (img.id === nextPlaceholder.text.match(/IMAGE:(\w+)/)?.[1] ||
+            img.id === nextPlaceholder.text.match(/PAIRED:(\w+):/)?.[1]) {
+          return { ...img, insertPosition: image.insertPosition };
+        }
+        return img;
+      })
+    );
+    
+    updatePreview(newContent);
+  };
   
   const updatePreview = (content, imagesList = images) => {
     let htmlContent = content;
     
     imagesList.forEach(image => {
-      const placeholder = `[IMAGE:${image.id}]`;
-      const imgClass = `preview-image preview-${image.position}`;
-      const imgHtml = `
-        <div class="${imgClass}">
-          <img src="${image.previewUrl}" alt="Image" />
-        </div>
-      `;
+      const singlePlaceholder = `[IMAGE:${image.id}]`;
+      if (htmlContent.includes(singlePlaceholder)) {
+        const imgClass = `preview-image preview-${image.position} size-${image.size}`;
+        const imgHtml = `
+          <div class="${imgClass}">
+            <img src="${image.previewUrl}" alt="Image" />
+          </div>
+        `;
+        htmlContent = htmlContent.replace(singlePlaceholder, imgHtml);
+      }
       
-      htmlContent = htmlContent.replace(placeholder, imgHtml);
+      imagesList.forEach(otherImage => {
+        if (image.id < otherImage.id) {
+          const pairedPlaceholder = `[PAIRED:${image.id}:${otherImage.id}]`;
+          const reversePairedPlaceholder = `[PAIRED:${otherImage.id}:${image.id}]`;
+          if (htmlContent.includes(pairedPlaceholder) || htmlContent.includes(reversePairedPlaceholder)) {
+            const pairHtml = `
+              <div class="preview-image-pair">
+                <div class="preview-image size-${image.size}">
+                  <img src="${image.previewUrl}" alt="Image" />
+                </div>
+                <div class="preview-image size-${otherImage.size}">
+                  <img src="${otherImage.previewUrl}" alt="Image" />
+                </div>
+              </div>
+            `;
+            htmlContent = htmlContent.replace(pairedPlaceholder, pairHtml);
+            htmlContent = htmlContent.replace(reversePairedPlaceholder, pairHtml);
+          }
+        }
+      });
     });
     
     htmlContent = htmlContent.replace(/\n/g, '<br>');
@@ -348,35 +555,48 @@ function EditPost({ postId, onCancel }) {
       const uploadedImages = [];
       
       for (let image of images) {
-        if (image.original) {
-          uploadedImages.push({
-            url: image.url,
-            position: image.position,
-            id: image.id
-          });
-          continue;
+        let downloadUrl = image.url;
+        if (!image.original) {
+          const storageRef = ref(storage, `blog-images/${Date.now()}_${image.file.name}`);
+          await uploadBytes(storageRef, image.file);
+          downloadUrl = await getDownloadURL(storageRef);
         }
-        
-        const storageRef = ref(storage, `blog-images/${Date.now()}_${image.file.name}`);
-        await uploadBytes(storageRef, image.file);
-        const downloadUrl = await getDownloadURL(storageRef);
         
         uploadedImages.push({
           url: downloadUrl,
           position: image.position,
-          id: image.id
+          size: image.size,
+          id: image.id,
+          pairedWith: image.pairedWith
         });
       }
       
       let finalContent = formData.content;
       
       uploadedImages.forEach(image => {
-        const placeholder = `[IMAGE:${image.id}]`;
-        const imgHtml = `<img src="${image.url}" class="blog-image-${image.position}" alt="Blog Image" />`;
-        finalContent = finalContent.replace(placeholder, imgHtml);
+        const singlePlaceholder = `[IMAGE:${image.id}]`;
+        if (finalContent.includes(singlePlaceholder)) {
+          const imgHtml = `<img src="${image.url}" class="blog-image-${image.position} size-${image.size}" alt="Blog Image" />`;
+          finalContent = finalContent.replace(singlePlaceholder, imgHtml);
+        }
+        
+        if (image.pairedWith) {
+          const pairedImage = uploadedImages.find(img => img.id === image.pairedWith);
+          if (pairedImage) {
+            const pairedPlaceholder = `[PAIRED:${image.id}:${pairedImage.id}]`;
+            const reversePairedPlaceholder = `[PAIRED:${pairedImage.id}:${image.id}]`;
+            const pairHtml = `
+              <div class="blog-image-pair">
+                <img src="${image.url}" class="size-${image.size}" alt="Blog Image" />
+                <img src="${pairedImage.url}" class="size-${pairedImage.size}" alt="Blog Image" />
+              </div>
+            `;
+            finalContent = finalContent.replace(pairedPlaceholder, pairHtml);
+            finalContent = finalContent.replace(reversePairedPlaceholder, pairHtml);
+          }
+        }
       });
 
-      // Process hashtags
       const hashtagsArray = formData.hashtags
         .split(',')
         .map(tag => tag.trim().toLowerCase().replace(/[^a-z0-9-]/g, ''))
@@ -524,7 +744,51 @@ function EditPost({ postId, onCancel }) {
                         <option value="right">Right</option>
                         <option value="full">Full Width</option>
                       </select>
+                      <select
+                        value={image.size}
+                        onChange={(e) => changeImageSize(image.id, e.target.value)}
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <option value="small">Small</option>
+                        <option value="medium">Medium</option>
+                        <option value="large">Large</option>
+                      </select>
+                      <select
+                        value={image.pairedWith || ''}
+                        onChange={(e) => handleImagePairing(image.id, e.target.value)}
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <option value="">No Pair</option>
+                        {images
+                          .filter(img => img.id !== image.id && img.pairedWith === null)
+                          .map(img => (
+                            <option key={img.id} value={img.id}>{`Image ${images.findIndex(i => i.id === img.id) + 1}`}</option>
+                          ))
+                        }
+                      </select>
                       <div className="image-buttons">
+                        <button 
+                          type="button" 
+                          className="move-image-up"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            moveImageUp(image.id);
+                          }}
+                          disabled={image.insertPosition === null}
+                        >
+                          ↑
+                        </button>
+                        <button 
+                          type="button" 
+                          className="move-image-down"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            moveImageDown(image.id);
+                          }}
+                          disabled={image.insertPosition === null}
+                        >
+                          ↓
+                        </button>
                         <button 
                           type="button" 
                           className="insert-image"
