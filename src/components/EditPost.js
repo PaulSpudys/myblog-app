@@ -16,6 +16,7 @@ function EditPost({ postId, onCancel }) {
   
   const [originalImages, setOriginalImages] = useState([]);
   const [images, setImages] = useState([]);
+  const [thumbnailId, setThumbnailId] = useState(null); // Track selected thumbnail
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitMessage, setSubmitMessage] = useState('');
@@ -102,6 +103,13 @@ function EditPost({ postId, onCancel }) {
           
           setOriginalImages(extractedImages);
           setImages(extractedImages);
+          
+          // Set thumbnailId based on imageUrl
+          if (postData.imageUrl) {
+            const thumbnailImage = extractedImages.find(img => img.url === postData.imageUrl);
+            setThumbnailId(thumbnailImage ? thumbnailImage.id : null);
+          }
+          
           updatePreview(processedContent, extractedImages);
         } else {
           setSubmitMessage("Post not found");
@@ -275,6 +283,11 @@ function EditPost({ postId, onCancel }) {
     
     setImages(prevImages => [...prevImages, ...newImages]);
     
+    // Set first new image as thumbnail if none selected
+    if (!thumbnailId && newImages.length > 0) {
+      setThumbnailId(newImages[0].id);
+    }
+    
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
     }
@@ -299,6 +312,11 @@ function EditPost({ postId, onCancel }) {
     }
     
     setImages(prevImages => prevImages.filter(image => image.id !== id));
+    
+    // Reset thumbnail if removed image was the thumbnail
+    if (thumbnailId === id) {
+      setThumbnailId(images.length > 1 ? images[0].id : null);
+    }
   };
   
   const changeImagePosition = (id, position) => {
@@ -557,7 +575,8 @@ function EditPost({ postId, onCancel }) {
       for (let image of images) {
         let downloadUrl = image.url;
         if (!image.original) {
-          const storageRef = ref(storage, `blog-images/${Date.now()}_${image.file.name}`);
+          const cleanFileName = image.file.name.replace(/[^a-zA-Z0-9.]/g, '_');
+          const storageRef = ref(storage, `blog-images/${Date.now()}_${cleanFileName}`);
           await uploadBytes(storageRef, image.file);
           downloadUrl = await getDownloadURL(storageRef);
         }
@@ -602,12 +621,20 @@ function EditPost({ postId, onCancel }) {
         .map(tag => tag.trim().toLowerCase().replace(/[^a-z0-9-]/g, ''))
         .filter(tag => tag !== '');
 
+      // Use selected thumbnail or first image if none selected
+      const mainImageUrl = thumbnailId 
+        ? uploadedImages.find(img => img.id === thumbnailId)?.url 
+        : uploadedImages.length > 0 
+          ? uploadedImages[0].url 
+          : null;
+
       await updateDoc(doc(db, "blogPosts", postId), {
         title: formData.title,
         content: finalContent,
         author: formData.author,
         images: uploadedImages,
         hashtags: hashtagsArray,
+        imageUrl: mainImageUrl, // Update thumbnail
         lastUpdated: new Date()
       });
 
@@ -625,6 +652,10 @@ function EditPost({ postId, onCancel }) {
     } finally {
       setIsSubmitting(false);
     }
+  };
+
+  const handleThumbnailSelect = (id) => {
+    setThumbnailId(id);
   };
 
   useEffect(() => {
@@ -734,6 +765,18 @@ function EditPost({ postId, onCancel }) {
                       className="image-preview" 
                     />
                     <div className="image-controls">
+                      <div className="thumbnail-select">
+                        <label>
+                          <input
+                            type="radio"
+                            name="thumbnail"
+                            checked={thumbnailId === image.id}
+                            onChange={() => handleThumbnailSelect(image.id)}
+                            onClick={(e) => e.stopPropagation()}
+                          />
+                          Set as Thumbnail
+                        </label>
+                      </div>
                       <select 
                         value={image.position}
                         onChange={(e) => changeImagePosition(image.id, e.target.value)}
@@ -814,6 +857,9 @@ function EditPost({ postId, onCancel }) {
                     </div>
                     {image.insertPosition !== null && (
                       <div className="image-status">Inserted in content</div>
+                    )}
+                    {thumbnailId === image.id && (
+                      <div className="thumbnail-status">Selected as Thumbnail</div>
                     )}
                   </div>
                 ))}

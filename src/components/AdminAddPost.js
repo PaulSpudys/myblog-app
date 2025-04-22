@@ -15,6 +15,7 @@ function AdminAddPost() {
   });
   
   const [images, setImages] = useState([]);
+  const [thumbnailId, setThumbnailId] = useState(null); // Track selected thumbnail
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitMessage, setSubmitMessage] = useState('');
   const [submitStatus, setSubmitStatus] = useState('');
@@ -224,6 +225,11 @@ function AdminAddPost() {
     
     setImages(prevImages => [...prevImages, ...newImages]);
     
+    // Set first uploaded image as thumbnail if none selected
+    if (!thumbnailId && newImages.length > 0) {
+      setThumbnailId(newImages[0].id);
+    }
+    
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
     }
@@ -248,6 +254,11 @@ function AdminAddPost() {
     }
     
     setImages(prevImages => prevImages.filter(image => image.id !== id));
+    
+    // Reset thumbnail if removed image was the thumbnail
+    if (thumbnailId === id) {
+      setThumbnailId(images.length > 1 ? images[0].id : null);
+    }
   };
   
   const changeImagePosition = (id, position) => {
@@ -549,8 +560,12 @@ function AdminAddPost() {
       
       finalContent = finalContent.replace(/\n/g, '<br>');
       
-      const mainImageUrl = uploadedImages.length > 0 ? uploadedImages[0].url : null;
-      const generatedExcerpt = finalContent.replace(/<[^>]*>/g, '').substring(0, 150) + '...';
+      // Use selected thumbnail or first image if none selected
+      const mainImageUrl = thumbnailId 
+        ? uploadedImages.find(img => img.id === thumbnailId)?.url 
+        : uploadedImages.length > 0 
+          ? uploadedImages[0].url 
+          : null;
 
       const hashtagsArray = formData.hashtags
         .split(',')
@@ -560,10 +575,10 @@ function AdminAddPost() {
       await addDoc(collection(db, "blogPosts"), {
         title: formData.title,
         content: finalContent,
-        excerpt: formData.excerpt || generatedExcerpt,
+        excerpt: formData.excerpt || finalContent.replace(/<[^>]*>/g, '').substring(0, 150) + '...',
         author: formData.author,
         date: Timestamp.now(),
-        imageUrl: mainImageUrl,
+        imageUrl: mainImageUrl, // Explicitly set thumbnail
         images: uploadedImages,
         hashtags: hashtagsArray
       });
@@ -579,6 +594,7 @@ function AdminAddPost() {
         hashtags: ''
       });
       setImages([]);
+      setThumbnailId(null); // Reset thumbnail
       setPreviewContent('');
       
     } catch (error) {
@@ -588,6 +604,10 @@ function AdminAddPost() {
     } finally {
       setIsSubmitting(false);
     }
+  };
+
+  const handleThumbnailSelect = (id) => {
+    setThumbnailId(id);
   };
 
   useEffect(() => {
@@ -708,6 +728,18 @@ function AdminAddPost() {
                       className="image-preview" 
                     />
                     <div className="image-controls">
+                      <div className="thumbnail-select">
+                        <label>
+                          <input
+                            type="radio"
+                            name="thumbnail"
+                            checked={thumbnailId === image.id}
+                            onChange={() => handleThumbnailSelect(image.id)}
+                            onClick={(e) => e.stopPropagation()}
+                          />
+                          Set as Thumbnail
+                        </label>
+                      </div>
                       <select 
                         value={image.position}
                         onChange={(e) => changeImagePosition(image.id, e.target.value)}
@@ -788,6 +820,9 @@ function AdminAddPost() {
                     </div>
                     {image.insertPosition !== null && (
                       <div className="image-status">Inserted in content</div>
+                    )}
+                    {thumbnailId === image.id && (
+                      <div className="thumbnail-status">Selected as Thumbnail</div>
                     )}
                   </div>
                 ))}

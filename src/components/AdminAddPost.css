@@ -275,6 +275,25 @@
   color: var(--text-primary);
 }
 
+.thumbnail-select {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.85rem;
+  color: var(--text-primary);
+}
+
+.thumbnail-select label {
+  font-weight: 500;
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+
+.thumbnail-select input[type="radio"] {
+  accent-color: var(--accent-blue);
+  margin: 0;
+}
+
 .image-buttons {
   display: flex;
   gap: 8px;
@@ -350,12 +369,21 @@
   box-shadow: 0 0 0 2px rgba(135, 194, 165, 0.3);
 }
 
-.image-status {
+.image-status,
+.thumbnail-status {
   margin-top: 8px;
   font-size: 0.8rem;
-  color: var(--accent-green);
   text-align: center;
   font-style: italic;
+}
+
+.image-status {
+  color: var(--accent-green);
+}
+
+.thumbnail-status {
+  color: var(--accent-blue);
+  font-weight: 500;
 }
 
 .insert-controls {
