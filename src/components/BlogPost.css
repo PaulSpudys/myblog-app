@@ -1,24 +1,12 @@
-:root {
-  --dark-bg: #1a1a1c;
-  --dark-surface: #2a2a2e;
-  --dark-elevated: #323236;
-  --text-primary: #f5f5f7;
-  --text-secondary: rgba(255, 255, 255, 0.7);
-  --accent-blue: #6e8efa;
-  --accent-purple: #a78bfa;
-  --accent-pink: #d85893;
-  --accent-green: #87c2a5;
-  --shadow-color: rgba(0, 0, 0, 0.3);
-}
-
+/* src/components/blogpost.css */
 .blog-post, .blog-post-card {
-  background-color: var(--dark-surface);
+  background-color: var(--surface);
   border-radius: 16px;
   overflow: hidden;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 6px 18px var(--shadow);
   margin-bottom: 30px;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--input-border);
 }
 
 .blog-post-card {
@@ -31,8 +19,8 @@
 
 .blog-post-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-  border-color: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 10px 25px var(--shadow);
+  border-color: var(--input-border-hover);
 }
 
 .blog-post-thumbnail {
@@ -132,7 +120,7 @@
   display: inline-block;
   padding: 10px 18px;
   background-color: var(--accent-blue);
-  color: white;
+  color: var(--text-primary);
   text-decoration: none;
   border-radius: 20px;
   font-weight: 500;
@@ -142,9 +130,9 @@
 }
 
 .read-more-button:hover {
-  background-color: rgba(110, 142, 250, 0.85);
+  background-color: var(--accent-blue-hover);
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 12px var(--shadow);
 }
 
 .blog-post {
@@ -156,7 +144,7 @@
   width: 100%;
   max-height: 500px;
   object-fit: cover;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid var(--input-border);
 }
 
 .blog-post-content {
@@ -187,21 +175,21 @@
 
 .edit-button {
   background-color: var(--accent-blue);
-  color: white;
+  color: var(--text-primary);
 }
 
 .edit-button:hover {
-  background-color: rgba(110, 142, 250, 0.85);
+  background-color: var(--accent-blue-hover);
   transform: translateY(-2px);
 }
 
 .delete-button {
-  background-color: rgba(255, 59, 48, 0.8);
-  color: white;
+  background-color: var(--accent-red);
+  color: var(--text-primary);
 }
 
 .delete-button:hover {
-  background-color: rgba(255, 59, 48, 0.95);
+  background-color: var(--accent-red-hover);
   transform: translateY(-2px);
 }
 
@@ -218,7 +206,7 @@
   border-radius: 10px;
   margin: 25px 0;
   display: inline-block;
-  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 5px 20px var(--shadow);
 }
 
 .blog-post-body .blog-image-left {
@@ -250,16 +238,16 @@
 .blog-post-footer {
   margin-top: 30px;
   padding-top: 20px;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-top: 1px solid var(--input-border);
   display: flex;
   align-items: center;
   gap: 15px;
 }
 
 .like-button {
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--input-bg);
   color: var(--text-secondary);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--input-border);
   padding: 8px 16px;
   border-radius: 20px;
   cursor: pointer;
@@ -271,14 +259,14 @@
 }
 
 .like-button:hover {
-  background: rgba(255, 255, 255, 0.12);
+  background: var(--input-bg-hover);
   transform: translateY(-2px);
 }
 
 .like-button.liked {
-  color: #ff2d55;
-  background: rgba(255, 45, 85, 0.1);
-  border-color: rgba(255, 45, 85, 0.2);
+  color: var(--accent-pink);
+  background: var(--error-bg);
+  border-color: var(--error-border);
 }
 
 .delete-confirmation {
@@ -287,7 +275,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(26, 26, 28, 0.9);
+  background-color: var(--glass-bg);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   display: flex;
@@ -325,22 +313,22 @@
 }
 
 .confirm-delete-button {
-  background-color: rgba(255, 59, 48, 0.8);
-  color: white;
+  background-color: var(--accent-red);
+  color: var(--text-primary);
 }
 
 .confirm-delete-button:hover {
-  background-color: rgba(255, 59, 48, 0.95);
+  background-color: var(--accent-red-hover);
   transform: translateY(-2px);
 }
 
 .cancel-delete-button {
-  background-color: rgba(142, 142, 147, 0.3);
+  background-color: var(--cancel-bg);
   color: var(--text-primary);
 }
 
 .cancel-delete-button:hover {
-  background-color: rgba(142, 142, 147, 0.4);
+  background-color: var(--cancel-bg-hover);
   transform: translateY(-2px);
 }
 

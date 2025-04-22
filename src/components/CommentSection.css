@@ -1,3 +1,4 @@
+/* src/components/CommentSection.css */
 .comment-section {
   margin-top: 2rem;
   padding: 1rem;
@@ -5,6 +6,7 @@
 
 .comment-section-title {
   margin-bottom: 1rem;
+  color: var(--text-primary);
 }
 
 .comment-form {
@@ -18,41 +20,44 @@
   resize: vertical;
   min-height: 100px;
   padding: 0.5rem;
-  border: 1px solid #ddd;
+  border: 1px solid var(--input-border);
   border-radius: 4px;
+  background-color: var(--input-bg);
+  color: var(--text-primary);
 }
 
 .comment-submit {
   align-self: flex-start;
   padding: 0.5rem 1rem;
-  background-color: #007bff;
-  color: white;
+  background-color: var(--accent-blue);
+  color: var(--text-primary);
   border: none;
   border-radius: 4px;
   cursor: pointer;
 }
 
 .comment-submit:hover {
-  background-color: #0056b3;
+  background-color: var(--accent-blue-dark);
 }
 
 .comment-submit:disabled {
-  background-color: #6c757d;
+  background-color: var(--disabled-bg);
+  color: var(--disabled-text);
   cursor: not-allowed;
 }
 
 .comment-cancel {
   align-self: flex-start;
   padding: 0.5rem 1rem;
-  background-color: #dc3545;
-  color: white;
+  background-color: var(--accent-red);
+  color: var(--text-primary);
   border: none;
   border-radius: 4px;
   cursor: pointer;
 }
 
 .comment-cancel:hover {
-  background-color: #c82333;
+  background-color: var(--accent-red-hover);
 }
 
 .comment-edit-actions {
@@ -62,11 +67,11 @@
 
 .comment-login-message {
   margin-bottom: 1rem;
-  color: #666;
+  color: var(--text-secondary);
 }
 
 .comment-error {
-  color: #dc3545;
+  color: var(--error-text);
   margin-bottom: 1rem;
 }
 
@@ -75,5 +80,5 @@
 }
 
 .no-comments {
-  color: #666;
+  color: var(--text-secondary);
 }

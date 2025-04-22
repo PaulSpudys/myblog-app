@@ -1,10 +1,33 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import './Navbar.css';
 
+// Create a ThemeContext for managing light/dark mode
+const ThemeContext = React.createContext();
+
+export const ThemeProvider = ({ children }) => {
+  const [theme, setTheme] = useState(localStorage.getItem('theme') || 'dark');
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('theme', theme);
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme(prevTheme => (prevTheme === 'dark' ? 'light' : 'dark'));
+  };
+
+  return (
+    <ThemeContext.Provider value={{ theme, toggleTheme }}>
+      {children}
+    </ThemeContext.Provider>
+  );
+};
+
 function Navbar() {
   const { currentUser, logout, isAdmin } = useAuth();
+  const { theme, toggleTheme } = useContext(ThemeContext);
   const [scrolled, setScrolled] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -81,8 +104,21 @@ function Navbar() {
           )}
         </ul>
         
-        {/* User Menu */}
+        {/* User Menu and Theme Toggle */}
         <div className="user-menu">
+          {/* Theme Toggle Switch */}
+          <div className="theme-toggle">
+            <label className="switch">
+              <input
+                type="checkbox"
+                checked={theme === 'dark'}
+                onChange={toggleTheme}
+                aria-label="Toggle light/dark mode"
+              />
+              <span className="slider"></span>
+            </label>
+          </div>
+
           {currentUser ? (
             <div className="user-dropdown">
               <button 

@@ -1,8 +1,8 @@
-/* Dark Theme Footer.css */
+/* src/components/Footer.css */
 .footer {
-  background-color: var(--dark-elevated);
+  background-color: var(--elevated);
   padding: 40px 0;
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  border-top: 1px solid var(--input-border);
 }
 
 .footer-container {
@@ -64,7 +64,7 @@
   padding-top: 30px;
   text-align: center;
   width: 100%;
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  border-top: 1px solid var(--input-border);
   margin-top: 30px;
 }
 
@@ -87,14 +87,14 @@
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  background-color: rgba(255, 255, 255, 0.05);
+  background-color: var(--input-bg);
   color: var(--text-secondary);
   transition: all 0.2s;
 }
 
 .social-icon:hover {
   background-color: var(--accent-blue);
-  color: white;
+  color: var(--text-primary);
   transform: translateY(-3px);
 }
 

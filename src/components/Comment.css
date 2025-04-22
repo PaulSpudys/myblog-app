@@ -1,25 +1,10 @@
-/* Dark Theme Comment.css */
-:root {
-  --dark-bg: #1a1a1c;
-  --dark-surface: #2a2a2e;
-  --dark-elevated: #323236;
-  --text-primary: #f5f5f7;
-  --text-secondary: rgba(255, 255, 255, 0.7);
-  --accent-blue: #6e8efa;
-  --accent-purple: #a78bfa;
-  --accent-pink: #d85893;
-  --accent-green: #87c2a5;
-  --shadow-color: rgba(0, 0, 0, 0.3);
-  --button-orange: #f28c38;
-  --button-red: #dc3545;
-}
-
+/* src/components/comment.css */
 .comment {
   padding: 16px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--input-border);
   border-radius: 12px;
   margin-bottom: 16px;
-  background-color: rgba(42, 42, 46, 0.6);
+  background-color: var(--glass-bg);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -27,7 +12,7 @@
 
 .comment:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 6px 15px var(--shadow);
 }
 
 .comment-header {
@@ -36,7 +21,7 @@
   align-items: center;
   margin-bottom: 10px;
   padding-bottom: 8px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid var(--input-border);
 }
 
 .comment-author {
@@ -62,12 +47,12 @@
 .comment-actions {
   margin-top: 0.75rem;
   display: flex;
-  gap: 0.75rem; /* Spacing between buttons */
+  gap: 0.75rem;
 }
 
 .comment-edit-btn {
   padding: 0.5rem 1rem;
-  background-color: var(--button-orange);
+  background-color: var(--accent-orange);
   color: var(--text-primary);
   border: none;
   border-radius: 6px;
@@ -77,12 +62,12 @@
 }
 
 .comment-edit-btn:hover {
-  background-color: #d97a30; /* Darker orange on hover */
+  background-color: var(--accent-orange-hover);
 }
 
 .comment-delete-btn {
   padding: 0.5rem 1rem;
-  background-color: var(--button-red);
+  background-color: var(--accent-red);
   color: var(--text-primary);
   border: none;
   border-radius: 6px;
@@ -92,7 +77,7 @@
 }
 
 .comment-delete-btn:hover {
-  background-color: #c82333; /* Darker red on hover */
+  background-color: var(--accent-red-hover);
 }
 
 /* Animation for new comments */

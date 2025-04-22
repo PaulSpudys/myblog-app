@@ -1,17 +1,4 @@
-/* Dark Theme Admin.css */
-:root {
-  --dark-bg: #1a1a1c;
-  --dark-surface: #2a2a2e;
-  --dark-elevated: #323236;
-  --text-primary: #f5f5f7;
-  --text-secondary: rgba(255, 255, 255, 0.7);
-  --accent-blue: #6e8efa;
-  --accent-purple: #a78bfa;
-  --accent-pink: #d85893;
-  --accent-green: #87c2a5;
-  --shadow-color: rgba(0, 0, 0, 0.3);
-}
-
+/* AdminAddPost.css */
 .admin-post-container {
   max-width: 1200px;
   margin: 20px auto;
@@ -35,20 +22,20 @@
 .admin-form {
   flex: 1;
   min-width: 300px;
-  background-color: var(--dark-surface);
+  background-color: var(--surface);
   padding: 30px;
   border-radius: 16px;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 8px 30px var(--shadow);
   border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .post-preview {
   flex: 1;
   min-width: 300px;
-  background-color: var(--dark-surface);
+  background-color: var(--surface);
   padding: 30px;
   border-radius: 16px;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 8px 30px var(--shadow);
   position: sticky;
   top: 100px;
   max-height: calc(100vh - 120px);
@@ -112,8 +99,8 @@
 .form-group textarea {
   width: 100%;
   padding: 14px;
-  background-color: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background-color: var(--input-bg);
+  border: 1px solid var(--input-border);
   border-radius: 8px;
   font-size: 1rem;
   color: var(--text-primary);
@@ -144,8 +131,8 @@
 .toggle-button {
   flex: 1;
   padding: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background-color: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--input-border);
+  background-color: var(--input-bg);
   color: var(--text-secondary);
   transition: all 0.3s ease;
 }
@@ -160,13 +147,13 @@
 
 .toggle-button.active {
   background-color: var(--accent-blue);
-  color: white;
+  color: var(--text-primary);
   border-color: var(--accent-blue);
 }
 
 .submit-button {
   background-color: var(--accent-blue);
-  color: white;
+  color: var(--text-primary);
   border: none;
   padding: 14px;
   border-radius: 8px;
@@ -179,14 +166,14 @@
 }
 
 .submit-button:hover {
-  background-color: rgba(110, 142, 250, 0.85);
+  background-color: var(--accent-blue-hover);
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 12px var(--shadow);
 }
 
 .submit-button:disabled {
-  background-color: rgba(153, 153, 153, 0.4);
-  color: rgba(255, 255, 255, 0.5);
+  background-color: var(--disabled-bg);
+  color: var(--disabled-text);
   cursor: not-allowed;
   transform: none;
   box-shadow: none;
@@ -200,15 +187,15 @@
 }
 
 .submit-message.success {
-  background-color: rgba(21, 128, 61, 0.2);
-  color: #4ade80;
-  border: 1px solid rgba(21, 128, 61, 0.3);
+  background-color: var(--success-bg);
+  color: var(--accent-green);
+  border: 1px solid var(--success-border);
 }
 
 .submit-message.error {
-  background-color: rgba(182, 37, 37, 0.2);
-  color: #f87171;
-  border: 1px solid rgba(182, 37, 37, 0.3);
+  background-color: var(--error-bg);
+  color: var(--error-text);
+  border: 1px solid var(--error-border);
 }
 
 .form-actions {
@@ -223,7 +210,7 @@
 
 .cancel-button {
   flex: 1;
-  background-color: rgba(117, 117, 117, 0.4);
+  background-color: var(--cancel-bg);
   color: var(--text-primary);
   border: none;
   padding: 14px;
@@ -236,17 +223,17 @@
 }
 
 .cancel-button:hover {
-  background-color: rgba(117, 117, 117, 0.6);
+  background-color: var(--cancel-bg-hover);
   transform: translateY(-2px);
 }
 
 /* Image gallery styles */
 .image-gallery {
   margin-bottom: 24px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--input-border);
   padding: 20px;
   border-radius: 8px;
-  background-color: rgba(255, 255, 255, 0.03);
+  background-color: var(--input-bg);
 }
 
 .image-list {
@@ -257,10 +244,10 @@
 }
 
 .image-item {
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--input-border);
   border-radius: 8px;
   padding: 12px;
-  background-color: var(--dark-elevated);
+  background-color: var(--elevated);
   cursor: pointer;
   transition: all 0.2s ease;
 }
@@ -283,8 +270,8 @@
   width: 100%;
   padding: 8px;
   border-radius: 6px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background-color: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--input-border);
+  background-color: var(--input-bg);
   color: var(--text-primary);
 }
 
@@ -296,7 +283,7 @@
 
 .insert-image {
   background-color: var(--accent-green);
-  color: white;
+  color: var(--text-primary);
   border: none;
   padding: 6px 10px;
   border-radius: 6px;
@@ -307,13 +294,13 @@
 }
 
 .insert-image:hover {
-  background-color: rgba(135, 194, 165, 0.85);
+  background-color: var(--accent-green-hover);
   transform: translateY(-2px);
 }
 
 .remove-image {
-  background-color: rgba(244, 67, 54, 0.8);
-  color: white;
+  background-color: var(--error-bg);
+  color: var(--text-primary);
   border: none;
   padding: 6px 10px;
   border-radius: 6px;
@@ -324,14 +311,14 @@
 }
 
 .remove-image:hover {
-  background-color: rgba(244, 67, 54, 0.95);
+  background-color: var(--error-bg-hover);
   transform: translateY(-2px);
 }
 
 .move-image-up,
 .move-image-down {
   background-color: var(--accent-purple);
-  color: white;
+  color: var(--text-primary);
   border: none;
   padding: 6px 10px;
   border-radius: 6px;
@@ -342,19 +329,19 @@
 
 .move-image-up:hover,
 .move-image-down:hover {
-  background-color: rgba(167, 139, 250, 0.85);
+  background-color: var(--accent-purple-hover);
   transform: translateY(-2px);
 }
 
 .move-image-up:disabled,
 .move-image-down:disabled {
-  background-color: rgba(153, 153, 153, 0.4);
+  background-color: var(--disabled-bg);
   cursor: not-allowed;
 }
 
 .image-item:hover {
-  border-color: rgba(255, 255, 255, 0.2);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+  border-color: var(--input-border-hover);
+  box-shadow: 0 4px 15px var(--shadow);
   transform: translateY(-2px);
 }
 
@@ -378,7 +365,7 @@
 
 .insert-button {
   background-color: var(--accent-green);
-  color: white;
+  color: var(--text-primary);
   border: none;
   padding: 10px 16px;
   border-radius: 6px;
@@ -388,7 +375,7 @@
 }
 
 .insert-button:hover {
-  background-color: rgba(135, 194, 165, 0.85);
+  background-color: var(--accent-green-hover);
   transform: translateY(-2px);
 }
 
@@ -426,7 +413,7 @@
 .preview-image img {
   max-width: 100%;
   border-radius: 8px;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 6px 20px var(--shadow);
 }
 
 .preview-left {
@@ -564,23 +551,23 @@
   max-width: 400px;
 }
 
-/* Scrollbar styling for dark theme */
+/* Scrollbar styling */
 .post-preview::-webkit-scrollbar {
   width: 8px;
 }
 
 .post-preview::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--input-bg);
   border-radius: 4px;
 }
 
 .post-preview::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--input-border);
   border-radius: 4px;
 }
 
 .post-preview::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: var(--input-border-hover);
 }
 
 /* Responsive adjustments */

@@ -1,21 +1,8 @@
-/* Dark Theme BlogPage.css */
-:root {
-  --dark-bg: #1a1a1c;
-  --dark-surface: #2a2a2e;
-  --dark-elevated: #323236;
-  --text-primary: #f5f5f7;
-  --text-secondary: rgba(255, 255, 255, 0.7);
-  --accent-blue: #6e8efa;
-  --accent-purple: #a78bfa;
-  --accent-pink: #d85893;
-  --accent-green: #87c2a5;
-  --shadow-color: rgba(0, 0, 0, 0.3);
-}
-
+/* src/pages/BlogPage.css */
 .blog-page-container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 40px 20px;
+  padding: 80px 20px 40px; /* Added padding-top for navbar */
 }
 
 .blog-header {
@@ -26,14 +13,14 @@
 .blog-title {
   font-size: 3rem;
   margin-bottom: 15px;
-  color: var(--text-primary);
+  color: var(--text-primary); /* #f5f5f7 in dark mode */
   font-weight: 600;
   letter-spacing: -0.02em;
 }
 
 .blog-description {
   font-size: 1.2rem;
-  color: var(--text-secondary);
+  color: var(--text-secondary); /* Light gray in dark mode */
   max-width: 700px;
   margin: 0 auto;
   line-height: 1.5;
@@ -49,17 +36,17 @@
   text-align: center;
   padding: 50px;
   font-size: 1.2rem;
-  color: var(--text-secondary);
+  color: var(--text-secondary); /* Light gray in dark mode */
 }
 
 .warning {
   text-align: center;
   padding: 18px;
-  background-color: rgba(234, 179, 8, 0.15);
-  color: #fbbf24;
+  background-color: var(--warning-bg);
+  color: var(--warning-text); /* Yellow in dark mode */
   border-radius: 10px;
   margin-bottom: 30px;
-  border: 1px solid rgba(234, 179, 8, 0.3);
+  border: 1px solid var(--warning-border);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
 }
@@ -67,11 +54,11 @@
 .error {
   text-align: center;
   padding: 18px;
-  background-color: rgba(182, 37, 37, 0.15);
-  color: #f87171;
+  background-color: var(--error-bg);
+  color: var(--error-text); /* Red in dark mode */
   border-radius: 10px;
   margin-bottom: 30px;
-  border: 1px solid rgba(182, 37, 37, 0.3);
+  border: 1px solid var(--error-border);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
 }
@@ -79,18 +66,18 @@
 .no-posts {
   text-align: center;
   padding: 50px 40px;
-  background-color: var(--dark-surface);
+  background-color: var(--surface);
   border-radius: 16px;
-  color: var(--text-secondary);
+  color: var(--text-secondary); /* Light gray in dark mode */
   grid-column: 1 / -1;
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  border: 1px solid var(--input-border);
+  box-shadow: 0 4px 20px var(--shadow);
 }
 
 .blog-single-post-container {
   max-width: 800px;
   margin: 0 auto;
-  padding: 20px;
+  padding: 80px 20px 20px; /* Added padding-top for navbar */
 }
 
 .back-button {
@@ -99,9 +86,9 @@
   gap: 8px;
   padding: 10px 20px;
   margin-bottom: 25px;
-  background-color: rgba(255, 255, 255, 0.08);
-  color: var(--text-primary);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background-color: var(--input-bg);
+  color: var(--text-primary); /* #f5f5f7 in dark mode */
+  border: 1px solid var(--input-border);
   border-radius: 20px;
   cursor: pointer;
   font-size: 1rem;
@@ -109,7 +96,7 @@
 }
 
 .back-button:hover {
-  background-color: rgba(255, 255, 255, 0.12);
+  background-color: var(--input-bg-hover);
   transform: translateX(-3px);
 }
 
