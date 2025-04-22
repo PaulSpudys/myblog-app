@@ -5,6 +5,7 @@ import { db } from '../firebase/firebase';
 import BlogPost from '../components/BlogPost';
 import CommentSection from '../components/CommentSection';
 import EditPost from '../components/EditPost';
+import PinterestWidget from '../components/PinterestWidget'; // Import the new component
 import './BlogPage.css';
 
 function BlogPostPage() {
@@ -57,7 +58,6 @@ function BlogPostPage() {
   const handlePostUpdated = () => {
     console.log('handlePostUpdated triggered');
     setEditingPostId(null);
-    // Refresh post data
     const fetchPost = async () => {
       try {
         const postDoc = await getDoc(doc(db, 'blogPosts', postId));
@@ -73,8 +73,6 @@ function BlogPostPage() {
     };
     fetchPost();
   };
-
-  console.log('Rendering BlogPostPage:', { postId, editingPostId, postExists: !!post });
 
   if (loading) {
     return <div className="loading">Loading post...</div>;
@@ -110,23 +108,32 @@ function BlogPostPage() {
       <button onClick={handleGoBack} className="back-button">
         ← Back
       </button>
-      <BlogPost
-        id={post.id}
-        title={post.title}
-        date={post.date instanceof Date 
-          ? post.date.toLocaleDateString() 
-          : post.date.toDate 
-            ? post.date.toDate().toLocaleDateString()
-            : new Date(post.date).toLocaleDateString()}
-        author={post.author}
-        content={post.content}
-        imageUrl={post.imageUrl}
-        images={post.images || []}
-        likes={post.likes || 0}
-        hashtags={post.hashtags || []} // Added hashtags prop
-        onEdit={handleEditPost}
-      />
-      <CommentSection postId={post.id} />
+      <div className="blog-content-wrapper">
+        <div className="blog-post-main">
+          <BlogPost
+            id={post.id}
+            title={post.title}
+            date={post.date instanceof Date 
+              ? post.date.toLocaleDateString() 
+              : post.date.toDate 
+                ? post.date.toDate().toLocaleDateString()
+                : new Date(post.date).toLocaleDateString()}
+            author={post.author}
+            content={post.content}
+            imageUrl={post.imageUrl}
+            images={post.images || []}
+            likes={post.likes || 0}
+            hashtags={post.hashtags || []}
+            onEdit={handleEditPost}
+          />
+          <CommentSection postId={post.id} />
+        </div>
+        {post.author.toLowerCase() === 'her' && (
+          <aside className="blog-sidebar">
+            <PinterestWidget />
+          </aside>
+        )}
+      </div>
     </div>
   );
 }
